@@ -51,7 +51,7 @@
     <script type="text/javascript" src="Source/level.js"></script>
     <script type="text/javascript" src="Source/stage_level.js"></script>
     <script type="text/javascript" src="Source/bathroom_level.js"></script>
-    <script type="text/javascript" src="Source/backroom_level.js"></script>
+    <script type="text/javascript" src="Source/backstage_level.js"></script>
     <script type="text/javascript" src="Source/game.js"></script>
   </head>
   <body bgcolor = #D9D9D9 onload="initialize();">
@@ -59,207 +59,25 @@
       <source src="Sound/deep_rough.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- <audio preload="auto" id="song_1" >
-      <source src="Sound/Brett van Donsel - Meanwhile Back at the Saloon.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="song_2" >
-      <source src="Sound/Chris Haugen - Tumbleweed Texas.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="song_3" >
-      <source src="Sound/Kevin MacLeod - Drankin Song.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="song_4" >
-      <source src="Sound/ZitronSound - Wild West.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin" >
-      <source src="Sound/Cussin.mp3" type="audio/mpeg">
+    <audio preload="auto" id="flush" >
+      <source src="Sound/flush.mp3" type="audio/mpeg">
     </audio>
 
-    <audio preload="auto" id="crap_1" >
-      <source src="Sound/crap_1.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_2" >
-      <source src="Sound/crap_2.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_3" >
-      <source src="Sound/crap_3.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_4" >
-      <source src="Sound/crap_4.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_5" >
-      <source src="Sound/crap_5.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_6" >
-      <source src="Sound/crap_6.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_7" >
-      <source src="Sound/crap_7.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_8" >
-      <source src="Sound/crap_8.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_9" >
-      <source src="Sound/crap_9.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="crap_10" >
-      <source src="Sound/crap_10.mp3" type="audio/mpeg">
+    <audio preload="auto" id="sink" >
+      <source src="Sound/sink.mp3" type="audio/mpeg">
     </audio>
 
-    <audio preload="auto" id="cussin_1" >
-      <source src="Sound/cussin_1.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_2" >
-      <source src="Sound/cussin_2.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_3" >
-      <source src="Sound/cussin_3.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_4" >
-      <source src="Sound/cussin_4.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_5" >
-      <source src="Sound/cussin_5.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_6" >
-      <source src="Sound/cussin_6.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_7" >
-      <source src="Sound/cussin_7.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_8" >
-      <source src="Sound/cussin_8.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_9" >
-      <source src="Sound/cussin_9.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_10" >
-      <source src="Sound/cussin_10.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_11" >
-      <source src="Sound/cussin_11.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_12" >
-      <source src="Sound/cussin_12.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_13" >
-      <source src="Sound/cussin_13.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_14" >
-      <source src="Sound/cussin_14.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_15" >
-      <source src="Sound/cussin_15.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_16" >
-      <source src="Sound/cussin_16.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_17" >
-      <source src="Sound/cussin_17.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_18" >
-      <source src="Sound/cussin_18.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_19" >
-      <source src="Sound/cussin_19.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_20" >
-      <source src="Sound/cussin_20.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_21" >
-      <source src="Sound/cussin_21.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_22" >
-      <source src="Sound/cussin_22.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_23" >
-      <source src="Sound/cussin_23.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_24" >
-      <source src="Sound/cussin_24.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_25" >
-      <source src="Sound/cussin_25.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_26" >
-      <source src="Sound/cussin_26.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_27" >
-      <source src="Sound/cussin_27.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_28" >
-      <source src="Sound/cussin_28.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="cussin_29" >
-      <source src="Sound/cussin_29.mp3" type="audio/mpeg">
+    <audio preload="auto" id="conversation" >
+      <source src="Sound/conversation_1.mp3" type="audio/mpeg">
     </audio>
 
-    <audio preload="auto" id="horse_1" >
-      <source src="Sound/horse_1.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_2" >
-      <source src="Sound/horse_2.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_3" >
-      <source src="Sound/horse_3.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_4" >
-      <source src="Sound/horse_4.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_5" >
-      <source src="Sound/horse_5.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_6" >
-      <source src="Sound/horse_6.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_7" >
-      <source src="Sound/horse_7.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_8" >
-      <source src="Sound/horse_8.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_9" >
-      <source src="Sound/horse_9.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_10" >
-      <source src="Sound/horse_10.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_11" >
-      <source src="Sound/horse_11.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_12" >
-      <source src="Sound/horse_12.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_13" >
-      <source src="Sound/horse_13.mp3" type="audio/mpeg">
-    </audio>
-    <audio preload="auto" id="horse_14" >
-      <source src="Sound/horse_14.mp3" type="audio/mpeg">
+    <audio preload="auto" id="interactive" >
+      <source src="Sound/interactive.mp3" type="audio/mpeg">
     </audio>
 
-    <audio preload="auto" id="airhorn" >
-      <source src="Sound/airhorn.mp3" type="audio/mpeg">
+    <audio preload="auto" id="selection" >
+      <source src="Sound/selection.mp3" type="audio/mpeg">
     </audio>
-
-    <audio preload="auto" id="spray" >
-      <source src="Sound/spray.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio preload="auto" id="item" >
-      <source src="Sound/item.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio preload="auto" id="well_alright" >
-      <source src="Sound/well_alright.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio preload="auto" id="i_give_up" >
-      <source src="Sound/i_give_up.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio preload="auto" id="kick" >
-      <source src="Sound/kick.mp3" type="audio/mpeg">
-    </audio> -->
 
     <div id="mainDiv">
       <div id="loadingdiv">

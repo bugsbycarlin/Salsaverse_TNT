@@ -19,14 +19,25 @@ class Game {
 
     this.scenes = {};
 
+    this.properties = {};
+
     this.gotoScene("TitleCard");
     // this.scenes["TitleCard"] = new TitleCardScene(this);
     // this.scene = this.scenes["TitleCard"];
     // this.scene.start();
 
+    this.conversation = new Image();
+    this.conversation.src = "Art/Extras/conversation.png";
+    this.marker = new Image();
+    this.marker.src = "Art/Extras/marker.png";
+    this.side_marker = new Image();
+    this.side_marker.src = "Art/Extras/side_marker.png";
+
     this.team = [];
     this.team.push(new Character(canvas, this, "Gun", "Gun"));
     this.team.push(new Character(canvas, this, "Tune", "Tune"));
+    this.team[0].team = "team";
+    this.team[1].team = "team";
 
     setInterval(function() {self.update()},33);
   }
@@ -64,6 +75,41 @@ class Game {
       this.team[0].y = 630 - 540;
       this.team[1].x = 130 - 960;
       this.team[1].y = 628 - 540;
+    }
+  }
+
+
+  soundEffect(effect_name) {
+    if (this.properties["sound_effect"] == null) {
+      var sound_effect = "#" + effect_name;
+      $(sound_effect).prop("volume", 0.6);
+      $(sound_effect).trigger("play");
+      var self = this;
+      setTimeout(function() {
+        self.properties["sound_effect"] = null;
+      }, 800);
+    }
+  }
+
+
+  setMusic(music_name) {
+    if (this.music_name == null || this.music_name != music_name) {
+      this.music_name = music_name
+      this.music = $("#" + this.music_name);
+      this.music.load();
+      this.music.loop = true;
+      this.music.prop("volume", 0.3);
+      this.music.trigger("play");
+    }
+  }
+
+
+  stopMusic() {
+    console.log("A");
+    if (this.music != null) {
+      console.log("B");
+      this.music.trigger("pause");
+      this.music_name = null;
     }
   }
 

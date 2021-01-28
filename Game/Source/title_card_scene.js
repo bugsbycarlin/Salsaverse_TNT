@@ -114,9 +114,6 @@ class TitleCardScene {
 
 
   handleMouse(ev) {
-    // this.game.scenes["Stage"] = new Level(this.game, "Stage");
-    // this.game.scene = this.game.scenes["Stage"];
-    // this.game.scene.start();
     this.game.gotoScene("Stage");
   }
   

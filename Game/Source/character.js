@@ -3,7 +3,7 @@ var default_walk_speed = 6;
 var walk_frame_time = 175;
 
 class Character {
-  constructor(canvas, level, sprite_name, name, x=0, y=0, update=null) {
+  constructor(canvas, level, sprite_name, name, x=0, y=0, update=null, action=null) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
 
@@ -13,11 +13,12 @@ class Character {
     this.name = name;
     this.sprite_name = sprite_name;
 
+    this.radius = 40;
+
     this.direction = "down";
 
-    if (update != null) {
-      this.update = update;
-    }
+    this.update = update;
+    this.action = action;
 
     this.images = [];
     for (const element of ["down", "up", "left", "right", "downleft", "downright", "upleft", "upright"]) {
@@ -74,6 +75,52 @@ class Character {
     if (this.direction != null) {
       this.walkAnimation();
     }
+  }
+
+
+  randomWalk(direction_set) {
+    if (this.last_walk_change == null) {
+      this.last_walk_change = Date.now();
+      this.direction = null;
+      this.walk_speed = 3;
+    }
+
+    if (Date.now() - this.last_walk_change > 500) {
+      this.last_walk_change = Date.now();
+      var dice = Math.floor(Math.random() * 100);
+
+      if (direction_set == "updown") {
+        if (dice < 60) {
+          this.direction = null;
+        } else if (dice < 80) {
+          this.direction = "up"
+        } else {
+          this.direction = "down";
+        }
+      } else if (direction_set == "leftright") {
+        if (dice < 60) {
+          this.direction = null;
+        } else if (dice < 80) {
+          this.direction = "left"
+        } else {
+          this.direction = "right";
+        }
+      } else if (direction_set == "updownleftright") {
+        if (dice < 60) {
+          this.direction = null;
+        } else if (dice < 70) {
+          this.direction = "up"
+        } else if (dice < 80) {
+          this.direction = "down";
+        } else if (dice < 90) {
+          this.direction = "left";
+        } else {
+          this.direction = "right";
+        }
+      }
+    }
+
+    this.move();
   }
 
 

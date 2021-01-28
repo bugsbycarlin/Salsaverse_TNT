@@ -15,12 +15,26 @@ Level.prototype.loadBathroomLevel = function() {
     this.team[1].level = this;
     this.team[1].history = [];
 
-    this.things.push(new Thing(477 - 640, 345 - 360, 30, "toilet", null, null));
-    this.things.push(new Thing(650 - 640, 345 - 360, 30, "toilet", null, null));
-    this.things.push(new Thing(750 - 640, 365 - 360, 30, "bathroom_guy", null, null));
-    this.things.push(new Thing(300 - 640, 420 - 360, 30, "sink", null, null));
-    this.things.push(new Thing(250 - 640, 470 - 360, 30, "sink", null, null));
-    this.things.push(new Thing(995 - 640, 545 - 360, 30, "toilet_paper", null, null));
+    var self = this;
+
+    this.things.push(new Thing(477 - 640, 345 - 360, 40, "toilet", null, function() {
+      self.game.properties["use_toilet_without_washing"] = 1;
+      self.game.soundEffect("flush");
+    }));
+    this.things.push(new Thing(650 - 640, 345 - 360, 40, "toilet", null, function() {
+      self.game.properties["use_toilet_without_washing"] = 1;
+      self.game.soundEffect("flush");
+    }));
+    this.things.push(new Thing(300 - 640, 420 - 360, 40, "sink", null, function() {
+      self.game.properties["use_toilet_without_washing"] = null;
+      self.game.soundEffect("sink");
+    }));
+    this.things.push(new Thing(250 - 640, 470 - 360, 40, "sink", null, function() {
+      self.game.properties["use_toilet_without_washing"] = null;
+      self.game.soundEffect("sink");
+    }));
+    // this.things.push(new Thing(750 - 640, 365 - 360, 40, "bathroom_guy", null, null));
+    this.things.push(new Thing(985 - 640, 510 - 360, 40, "toilet_paper", null, null));
 
     // Verticals
     this.lines.push(new Line(380 - 640, 400 - 360, 890 - 640, 400 - 360));
@@ -30,7 +44,6 @@ Level.prototype.loadBathroomLevel = function() {
     this.lines.push(new Line(860 - 640, 385 - 360, 1070 - 640, 595 - 360));
     this.lines.push(new Line(415 - 640, 385 - 360, 205 - 640, 595 - 360));
 
-    var self = this;
     this.doors.push(new Door(
       870 - 640,
       400 - 360,
@@ -38,12 +51,25 @@ Level.prototype.loadBathroomLevel = function() {
       485 - 360,
       ["up", "right", "upright"],
       function() {
-        self.mode = "fade_out";
-        self.fade_alpha = 0;
-        setTimeout(function() {
-          this.game.gotoScene("Stage", "bathroom_start");
-        }, 800);
+        if (self.game.properties["use_toilet_without_washing"] != null) {
+          self.shortConversation("Hey! Wash your hands before you go!", "Bathroom_Guy");
+        } else {
+          self.mode = "fade_out";
+          self.fade_alpha = 0;
+          setTimeout(function() {
+            this.game.gotoScene("Stage", "bathroom_start");
+          }, 800);
+        }
       }
     ));
+
+    // NPCs
+  this.npcs.push(new Character(canvas, this, "Bathroom_Guy", "Bathroom_Guy", 750 - 640, 365 - 360,
+    // update
+    null,
+    // action
+    function() {
+      self.shortConversation("If you use the toilet, please wash your hands when\nyou finish.", "Bathroom_Guy");
+  }));
 
   }

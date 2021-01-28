@@ -47,7 +47,6 @@ class Level {
 
 
   update() {
-    console.log(this.mode);
     if (this.mode == "fade_in") {
       this.fade_alpha -= 0.04;
       if (this.fade_alpha <= 0) {
@@ -71,7 +70,7 @@ class Level {
     }
 
     if (this.full_text != null && this.partial_text != null && this.partial_text != this.full_text) {
-      this.partial_text = this.full_text.slice(0, this.partial_text.length + 1);
+      this.partial_text = this.full_text.slice(0, this.partial_text.length + 2);
     }
 
     this.updateCamera();
@@ -84,11 +83,6 @@ class Level {
 
     this.drawImage(this.level_image, 0, 0);
 
-    // drawImage(tune_images[gun_walk_image], character.x, character.y);
-    // for (var i = this.team.length - 1; i >= 0; i--) {
-    //   var teammate = this.team[i];
-    //   this.drawImage(teammate.images[teammate.current_image], teammate.x, teammate.y);
-    // }
     this.drawObjects.sort((a,b) => (a.y >= b.y) ? 1: -1);
     for (var i = 0; i < this.drawObjects.length; i++) {
       var object = this.drawObjects[i];
@@ -134,15 +128,7 @@ class Level {
     //   )
     // }
 
-    if (this.partial_text != null) {
-      this.context.font = '40px Minecraft';
-      this.context.fillStyle = 'black';
-      this.context.textAlign = "left";
-      this.context.textBaseline = 'top';
-      this.context.fillText (this.partial_text, 23, 23);
-      this.context.fillStyle = 'white';
-      this.context.fillText (this.partial_text, 24, 24);
-    }
+    this.renderConversation();
 
     if (this.mode == "fade_in" || this.mode == "fade_out") {
       this.context.globalAlpha = Math.max(0,Math.min(1.0,this.fade_alpha));
@@ -151,11 +137,196 @@ class Level {
     }
   }
 
+  renderConversation() {
+    if (this.partial_text != null) {
+      this.context.drawImage(this.game.conversation, 0, 0);
 
-  drawText(text) {
-    this.full_text = text
-    this.partial_text = "";
+      this.context.font = '40px Minecraft';
+      this.context.textAlign = "left";
+      this.context.textBaseline = 'top';
 
+      if (this.full_text != "_interactive_") {
+        console.log("Rendering static convo");
+        if (this.full_text.length <= 56) {
+          this.context.fillStyle = 'black';
+          this.context.fillText (this.partial_text, 39, 86);
+          this.context.fillStyle = 'white';
+          this.context.fillText (this.partial_text, 40, 87);
+        } else {
+          var text1, text2, text3;
+          [text1, text2, text3] = this.partial_text.split(/\n/);
+          // console.log(this.full_text.split(/\n/));
+          // var text1 = this.partial_text.slice(0, 56);
+          // var text2 = this.partial_text.slice(56, 110);
+          // var text3 = this.partial_text.slice(110, 1000);
+          if (text1 != null) {
+            this.context.fillStyle = 'black';
+            this.context.fillText (text1, 39, 36);
+            this.context.fillStyle = 'white';
+            this.context.fillText (text1, 40, 37);
+          }
+          if (text2 != null) {
+            this.context.fillStyle = 'black';
+            this.context.fillText (text2, 39, 93);
+            this.context.fillStyle = 'white';
+            this.context.fillText (text2, 40, 94);
+          }
+          if (text3 != null) {
+            this.context.fillStyle = 'black';
+            this.context.fillText (text3, 39, 150);
+            this.context.fillStyle = 'white';
+            this.context.fillText (text3, 40, 151);
+          }
+        }
+
+        if (this.speaker_image != null) {
+          this.context.drawImage(this.speaker_image, this.game.canvas.width - 153, 20);
+        }
+
+        if (this.conversation_queue.length > 0 && this.full_text == this.partial_text) {
+          if (this.marker_blink == null) {
+            this.marker_blink = Date.now();
+          }
+          if (Date.now() - this.marker_blink <= 400) {
+              this.context.drawImage(this.game.marker, 1040, 170);
+          }
+          if (Date.now() - this.marker_blink >= 800) {
+            this.marker_blink = Date.now();
+          } 
+        }
+      } else if (this.full_text == "_interactive_") {
+        console.log("Rendering interactive");
+        this.context.fillStyle = 'black';
+        this.context.fillText (this.interactive_1, 69, 51);
+        this.context.fillStyle = 'white';
+        this.context.fillText (this.interactive_1, 70, 52);
+
+        this.context.fillStyle = 'black';
+        this.context.fillText (this.interactive_2, 69, 125);
+        this.context.fillStyle = 'white';
+        this.context.fillText (this.interactive_2, 70, 126);
+
+        if (this.speaker_image != null) {
+          this.context.drawImage(this.speaker_image, this.game.canvas.width - 153, 20);
+        }
+
+        if (Date.now() - this.marker_blink <= 400) {
+          this.context.drawImage(this.game.side_marker, 30, 56 + 75 * this.interactive_choice);
+        }
+        if (Date.now() - this.marker_blink >= 800) {
+          this.marker_blink = Date.now();
+        } 
+      }
+    }
+  }
+
+
+  longConversation(conversation_queue) {
+    this.conversation_queue = conversation_queue
+    this.mode = "conversation";
+    this.conversationStep();
+  }
+
+
+  shortConversation(text, speaker = null) {
+    this.longConversation(
+      [[text, speaker]]
+    );
+  }
+
+
+  addMoreConversation(more_queue) {
+    console.log("adding more");
+    console.log(more_queue);
+    console.log(this.conversation_queue);
+    for (var i = 0; i < more_queue.length; i++) {
+      this.conversation_queue.push(more_queue[i]);
+    }
+    console.log(this.conversation_queue);
+    console.log(this);
+  }
+
+
+  conversationStep() {
+    if (this.conversation_queue == null || this.conversation_queue.length < 1) {
+      return;
+    }
+
+    var item = this.conversation_queue.shift()
+
+    if (item[0] == "_interactive_") {
+      // Oh! Interactive!
+
+      this.full_text = "_interactive_";
+
+      if (item[1] != null) {
+        this.speaker_image = new Image();
+        this.speaker_image.src = "Art/" + item[1] + "/headshot.png";
+      }
+
+      this.interactive_1 = item[2];
+      this.interactive_2 = item[3];
+      this.action_1 = item[4];
+      this.action_2 = item[5];
+      this.interactive_choice = 0;
+
+      this.marker_blink = Date.now();
+
+      var sound_effect = "#interactive";
+      $(sound_effect).prop("volume", 0.4);
+      $(sound_effect).trigger("play");
+    } else {
+      this.full_text = item[0]
+      this.partial_text = "";
+
+      if (item[1] != null) {
+        this.speaker_image = new Image();
+        this.speaker_image.src = "Art/" + item[1] + "/headshot.png";
+      }
+
+      var sound_effect = "#conversation";
+      $(sound_effect).prop("volume", 0.4);
+      $(sound_effect).trigger("play");
+    }
+  }
+
+
+  conversationAction() {
+    if (this.game.properties["last_action"] == null || Date.now() - this.game.properties["last_action"] > 100) {
+      this.game.properties["last_action"] = Date.now();
+    } else {
+      return;
+    }
+
+    if (this.partial_text != this.full_text) {
+      this.partial_text = this.full_text;
+    } else {
+      if (this.full_text != "_interactive_") {
+        if (this.conversation_queue.length > 0) {
+          this.conversationStep();
+        } else {
+          this.full_text = null;
+          this.partial_text = null;
+          this.mode = "active";
+        }
+      } else {
+        if (this.interactive_choice == 0) {
+          console.log("choice 0");
+          this.action_1();
+        } else {
+          console.log("choie 1");
+          this.action_2();
+        }
+        console.log(this.conversation_queue);
+        if (this.conversation_queue.length > 0) {
+          this.conversationStep();
+        } else {
+          this.full_text = null;
+          this.partial_text = null;
+          this.mode = "active";
+        }
+      }
+    }
   }
 
 
@@ -185,6 +356,25 @@ class Level {
       x2 -= character.walk_speed;
     } else if (direction == "right") {
       x2 += character.walk_speed;
+    }
+
+    // for (var i = 0; i < this.things.length; i++) {
+    //   var thing = this.things[i];
+    //   var x3 = thing.x;
+    //   var y3 = thing.y + 40;
+    //   if (distance(x2, y2, x3, y3) <= thing.radius) {
+    //     return null;
+    //   }
+    // }
+    for (var i = 0; i < this.drawObjects.length; i++) {
+      var object = this.drawObjects[i];
+      if (object.name != character.name && object.team != character.team) {
+        var x3 = object.x;
+        var y3 = object.y + 40;
+        if (distance(x2, y2, x3, y3) <= object.radius) {
+          return null;
+        }
+      }
     }
 
     if (x2 != x1 || y2 != y1) {
@@ -324,6 +514,60 @@ class Level {
   }
 
 
+  action(character) {
+    if (this.game.properties["last_action"] == null || Date.now() - this.game.properties["last_action"] > 100) {
+      this.game.properties["last_action"] = Date.now();
+    } else {
+      return;
+    }
+
+    // Determine closest action
+    var closest_object = null;
+    var closest_distance = -1;
+
+    var x1 = character.x;
+    var y1 = character.y + 40; // footing
+
+    for (var i = 0; i < this.drawObjects.length; i++) {
+      var object = this.drawObjects[i];
+      if (object.name != character.name && object.team != character.team) {
+        var x3 = object.x;
+        var y3 = object.y + 40;
+        if (distance(x2, y2, x3, y3) <= object.radius) {
+          return null;
+        }
+      }
+    }
+
+    for (var i = 0; i < this.things.length; i++) {
+      var thing = this.things[i];
+      if (thing.action == null) continue;
+      var x2 = thing.x;
+      var y2 = thing.y + 40;
+      var dist = distance(x1, y1, x2, y2);
+      if (dist < (thing.radius + 10) && (closest_distance == -1 || dist < closest_distance)) {
+        closest_object = thing;
+        closest_distance = dist;
+      }
+    }
+    for (var i = 0; i < this.npcs.length; i++) {
+      var npc = this.npcs[i];
+      if (npc.action == null) continue;
+      var x2 = npc.x;
+      var y2 = npc.y + 40;
+      var dist = distance(x1, y1, x2, y2);
+      if (dist < (npc.radius + 10) && (closest_distance == -1 || dist < closest_distance)) {
+        closest_object = npc;
+        closest_distance = dist;
+      }
+    }
+
+    if (closest_object != null) {
+      closest_object.action();
+    }
+  }
+
+
   teamSwap() {
     var new_team = [];
     new_team[1] = this.team[0];
@@ -349,15 +593,36 @@ class Level {
 
 
   handleKeyUp(ev) {
-    if (ev.key === "s") {
-      this.teamSwap();
-    }
+    if (this.mode == "active") {
+      if (ev.key === "s") {
+        this.teamSwap();
+      }
 
-    // if (ev.key === "b") {
-    //   this.game.scenes["Bathroom"] = new LevelScene(this.game, "Bathroom");
-    //   this.game.scene = this.game.scenes["Bathroom"];
-    //   this.game.scene.start();
-    // }
+      if (ev.key === "a") {
+        this.action(this.team[0]);
+      }
+    } else if (this.mode == "conversation") {
+      if (ev.key === "a") {
+        this.conversationAction();
+      }
+
+      if (this.full_text == "_interactive_") {
+        if (ev.key === "ArrowUp" || ev.key == "ArrowDown") {
+          if (this.game.properties["last_action"] == null || Date.now() - this.game.properties["last_action"] > 100) {
+            this.game.properties["last_action"] = Date.now();
+          } else {
+            return;
+          }
+
+          this.interactive_choice = (this.interactive_choice + 1) % 2;
+
+          // TO DO sound here
+          var sound_effect = "#selection";
+          $(sound_effect).prop("volume", 0.4);
+          $(sound_effect).trigger("play");
+        }
+      }
+    }
   }
   
 }
