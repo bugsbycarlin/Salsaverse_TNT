@@ -114,7 +114,7 @@ class TitleCardScene {
 
 
   handleMouse(ev) {
-    this.game.gotoScene("Stage");
+    this.game.gotoScene("Show");
   }
   
 }

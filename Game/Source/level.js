@@ -91,17 +91,27 @@ class Level {
       this.drawImage(object.images[object.current_image], object.x, object.y, object.current_image);
     }
 
-    this.context.font = '24px Minecraft';
-    this.context.fillStyle = 'black';
-    this.context.textAlign = "left";
-    this.context.textBaseline = 'top';
-    this.context.fillText ('A: Action', 23, 720 - 87);
-    this.context.fillText ('S: Swap Characters', 23, 720 - 63);
-    this.context.fillText ('Up,Down,Left,Right: Move', 23, 720 - 39);
-    this.context.fillStyle = 'white';
-    this.context.fillText ('A: Action', 24, 720 - 88);
-    this.context.fillText ('S: Swap Characters', 24, 720 - 64);
-    this.context.fillText ('Up,Down,Left,Right: Move', 24, 720 - 40);
+    if (this.mode == "active") {
+      this.context.font = '24px Minecraft';
+      this.context.fillStyle = 'black';
+      this.context.textAlign = "left";
+      this.context.textBaseline = 'top';
+      this.context.fillText ('A: Action', 23, 720 - 87);
+      this.context.fillText ('S: Swap Characters', 23, 720 - 63);
+      this.context.fillText ('Up,Down,Left,Right: Move', 23, 720 - 39);
+      this.context.fillStyle = 'white';
+      this.context.fillText ('A: Action', 24, 720 - 88);
+      this.context.fillText ('S: Swap Characters', 24, 720 - 64);
+      this.context.fillText ('Up,Down,Left,Right: Move', 24, 720 - 40);
+    } else if (this.mode == "conversation") {
+      // this.context.font = '24px Minecraft';
+      // this.context.fillStyle = 'black';
+      // this.context.textAlign = "left";
+      // this.context.textBaseline = 'top';
+      // this.context.fillText ('A: Conversation', 23, 720 - 39);
+      // this.context.fillStyle = 'white';
+      // this.context.fillText ('A: Conversation', 24, 720 - 40);
+    }
 
     // Debug lines
     
@@ -412,19 +422,21 @@ class Level {
 
     if (x2 != x1 || y2 != y1) {
 
-      for (var i = 0; i < this.doors.length; i++) {
-        var door = this.doors[i];
-        var self = this;
-        if (door.lineTest(x1, y1, x2, y2)) {
-          console.log("bumping a door");
-          console.log(door.allowed_directions);
-          console.log(door.action);
-          console.log(direction);
-          if (door.allowed_directions.includes(direction)) {
-            console.log("oh, bumping doors the right way is tight!");
-            door.flashColor("#0000FF", 500);
-            door.action();
-            return null;
+      if (character.name == "Gun" || character.name == "Tune") {
+        for (var i = 0; i < this.doors.length; i++) {
+          var door = this.doors[i];
+          var self = this;
+          if (door.lineTest(x1, y1, x2, y2)) {
+            console.log("bumping a door");
+            console.log(door.allowed_directions);
+            console.log(door.action);
+            console.log(direction);
+            if (door.allowed_directions.includes(direction)) {
+              console.log("oh, bumping doors the right way is tight!");
+              door.flashColor("#0000FF", 500);
+              door.action();
+              return null;
+            }
           }
         }
       }
@@ -659,6 +671,11 @@ class Level {
           $(sound_effect).trigger("play");
         }
       }
+    }
+
+    if (ev.key == "p") {
+      this.game.properties["have_seen_show"] = 1;
+      this.game.gotoScene("Show")
     }
   }
   

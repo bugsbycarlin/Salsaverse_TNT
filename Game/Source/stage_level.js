@@ -153,6 +153,7 @@ Level.prototype.loadStageLevel = function() {
       ["So psyched.", "Mohawk_Man_Ice"],
       ["So psyched...", "Mohawk_Man_Ice"],
       ["... I think I psyched myself out.", "Mohawk_Man_Ice"]], null);
+    this.makeStockCharacter("Punk_Lady_2", "Jenn", "updown", [["I've seen these guys three times already.\nI'm expecting a really good show.", "Punk_Lady_2"]], null);
   }
 
   this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
@@ -286,7 +287,10 @@ Level.prototype.loadStageLevel = function() {
       self.longConversation(queue);
   });
 
-  this.game.setMusic("deep_rough");
+  this.game.setMusic("deep_rough", "loop");
+  // this.game.setMusic("adventure", function() {
+  //   self.game.gotoScene("Bathroom");
+  // });
 
   // This won't work because the mode is switched to "fade in", and from there to "active".
   // this.shortConversation("It already happened. It is what it is. Please accept it.Anyway, we've got work to do, right? This is a very   very long sentence, but it'll fit, I think.", "Gun")

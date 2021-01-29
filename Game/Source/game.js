@@ -99,13 +99,24 @@ class Game {
   }
 
 
-  setMusic(music_name) {
+  setMusic(music_name, second_param) {
     if (this.music_name == null || this.music_name != music_name) {
       this.music_name = music_name
       this.music = $("#" + this.music_name);
       this.music.load();
-      this.music.loop = true;
       this.music.prop("volume", 0.3);
+      var self = this;
+
+      if (second_param == "loop") {
+        this.music.bind("ended", function(){
+          self.music.trigger("play");
+        });
+      } else if (second_param != null) {
+        this.music.bind("ended", function(){
+          second_param();
+        });
+      }
+
       this.music.trigger("play");
     }
   }

@@ -77,7 +77,8 @@ Level.prototype.loadBathroomLevel = function() {
   if (self.game.properties["have_seen_show"] != null) {
     this.makeStockCharacter("Mohawk_Man", "Eldridge", "updownleftright", [["Oh man, now I can go get my keys.", "Mohawk_Man"]], null);
     this.makeStockCharacter("Mohawk_Man_Orange", "John", "updownleftright", [["THAT WAS AWESOME!", "Mohawk_Man_Orange"]], null);
-    this.makeStockCharacter("Mohawk_Man_Ice", "Carl", "updownleftright", [["Yeah! WOOO! T.N.T.! (Whew, I got through it okay).", "Mohawk_Man_Ice"]], null);
+    this.makeStockCharacter("Mohawk_Man_Ice", "Carl", "updownleftright", [["Yeah! WOOO! T.N.T.! ( Whew, I got through it okay ).", "Mohawk_Man_Ice"]], null);
+    this.makeStockCharacter("Punk_Lady_2", "Jenn", "updown", [["You know it's a good show when you hold it\nthe whole time.", "Punk_Lady_2"]], null);
   }
 
   }
