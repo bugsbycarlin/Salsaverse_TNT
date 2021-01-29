@@ -41,6 +41,8 @@ class Level {
       this.drawObjects.push(this.npcs[i]);
     }
 
+    this.shuffleStockCharacters();
+
     this.mode = "fade_in";
     this.fade_alpha = 1;
   }
@@ -81,12 +83,12 @@ class Level {
     this.context.fillStyle = "#FFFFFF";
     this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
-    this.drawImage(this.level_image, 0, 0);
+    this.drawImage(this.level_image, 0, 0, "level");
 
     this.drawObjects.sort((a,b) => (a.y >= b.y) ? 1: -1);
     for (var i = 0; i < this.drawObjects.length; i++) {
       var object = this.drawObjects[i];
-      this.drawImage(object.images[object.current_image], object.x, object.y);
+      this.drawImage(object.images[object.current_image], object.x, object.y, object.current_image);
     }
 
     this.context.font = '24px Minecraft';
@@ -103,30 +105,30 @@ class Level {
 
     // Debug lines
     
-    // for (var i = 0; i < this.lines.length; i++) {
-    //   var line = this.lines[i];
-    //   drawLine(
-    //     this.context,
-    //     line.color,
-    //     640 + line.x1 - this.camera_x,
-    //     360 + line.y1 - this.camera_y,
-    //     640 + line.x2 - this.camera_x,
-    //     360 + line.y2 - this.camera_y,
-    //   )
-    // }
+    for (var i = 0; i < this.lines.length; i++) {
+      var line = this.lines[i];
+      drawLine(
+        this.context,
+        line.color,
+        640 + line.x1 - this.camera_x,
+        360 + line.y1 - this.camera_y,
+        640 + line.x2 - this.camera_x,
+        360 + line.y2 - this.camera_y,
+      )
+    }
 
-    // for (var i = 0; i < this.doors.length; i++) {
-    //   var door = this.doors[i];
-    //   drawLine(
-    //     this.context,
-    //     door.color,
-    //     // "FF0000",
-    //     640 + door.x1 - this.camera_x,
-    //     360 + door.y1 - this.camera_y,
-    //     640 + door.x2 - this.camera_x,
-    //     360 + door.y2 - this.camera_y,
-    //   )
-    // }
+    for (var i = 0; i < this.doors.length; i++) {
+      var door = this.doors[i];
+      drawLine(
+        this.context,
+        door.color,
+        // "FF0000",
+        640 + door.x1 - this.camera_x,
+        360 + door.y1 - this.camera_y,
+        640 + door.x2 - this.camera_x,
+        360 + door.y2 - this.camera_y,
+      )
+    }
 
     this.renderConversation();
 
@@ -146,7 +148,6 @@ class Level {
       this.context.textBaseline = 'top';
 
       if (this.full_text != "_interactive_") {
-        console.log("Rendering static convo");
         if (this.full_text.length <= 56) {
           this.context.fillStyle = 'black';
           this.context.fillText (this.partial_text, 39, 86);
@@ -155,10 +156,6 @@ class Level {
         } else {
           var text1, text2, text3;
           [text1, text2, text3] = this.partial_text.split(/\n/);
-          // console.log(this.full_text.split(/\n/));
-          // var text1 = this.partial_text.slice(0, 56);
-          // var text2 = this.partial_text.slice(56, 110);
-          // var text3 = this.partial_text.slice(110, 1000);
           if (text1 != null) {
             this.context.fillStyle = 'black';
             this.context.fillText (text1, 39, 36);
@@ -179,10 +176,6 @@ class Level {
           }
         }
 
-        if (this.speaker_image != null) {
-          this.context.drawImage(this.speaker_image, this.game.canvas.width - 153, 20);
-        }
-
         if (this.conversation_queue.length > 0 && this.full_text == this.partial_text) {
           if (this.marker_blink == null) {
             this.marker_blink = Date.now();
@@ -195,7 +188,6 @@ class Level {
           } 
         }
       } else if (this.full_text == "_interactive_") {
-        console.log("Rendering interactive");
         this.context.fillStyle = 'black';
         this.context.fillText (this.interactive_1, 69, 51);
         this.context.fillStyle = 'white';
@@ -206,23 +198,63 @@ class Level {
         this.context.fillStyle = 'white';
         this.context.fillText (this.interactive_2, 70, 126);
 
-        if (this.speaker_image != null) {
-          this.context.drawImage(this.speaker_image, this.game.canvas.width - 153, 20);
-        }
-
-        if (Date.now() - this.marker_blink <= 400) {
-          this.context.drawImage(this.game.side_marker, 30, 56 + 75 * this.interactive_choice);
-        }
-        if (Date.now() - this.marker_blink >= 800) {
-          this.marker_blink = Date.now();
-        } 
+        this.context.drawImage(this.game.side_marker, 30, 56 + 75 * this.interactive_choice);
       }
+
+      if (this.speaker_image != null) {
+        this.context.drawImage(this.speaker_image, this.game.canvas.width - 153, 20);
+      }
+      // if (this.speaker_name != null) {
+      //   this.context.font = '24px Minecraft';
+      //   this.context.textAlign = "center";
+      //   this.context.fillStyle = 'black';
+      //   this.context.fillText (this.speaker_name, this.game.canvas.width - 88, 165);
+      // }
     }
   }
 
 
+  makeStockCharacter(archetype, name, motion, linear_conversation, conversation_function=null) {
+    var x = Math.floor(Math.random() * (this.characterBounds[1] - this.characterBounds[0])) + this.characterBounds[0];
+    var y = Math.floor(Math.random() * (this.characterBounds[3] - this.characterBounds[2])) + this.characterBounds[2];
+    
+    var self = this;
+    var action = function() {
+      console.log("just making");
+      console.log(linear_conversation);
+      self.longConversation(linear_conversation);
+    };
+    if (conversation_function != null) {
+      action = conversation_function
+    }
+    var character = new Character(canvas, this, archetype, name, x, y,
+      // update
+      function() { this.randomWalk(motion); },
+      // action
+      action
+    );
+    if (motion == "leftright") {
+      character.direction = "right";
+      character.current_image = "right_0";
+    }
+    this.npcs.push(character);
+  }
+
+
+  shuffleStockCharacters() {
+
+  }
+
+
   longConversation(conversation_queue) {
-    this.conversation_queue = conversation_queue
+    if (conversation_queue == null) {
+      return;
+    }
+
+    this.conversation_queue = []
+    for (var i = 0; i < conversation_queue.length; i++) {
+      this.conversation_queue.push(conversation_queue[i]);
+    }
     this.mode = "conversation";
     this.conversationStep();
   }
@@ -236,14 +268,9 @@ class Level {
 
 
   addMoreConversation(more_queue) {
-    console.log("adding more");
-    console.log(more_queue);
-    console.log(this.conversation_queue);
     for (var i = 0; i < more_queue.length; i++) {
       this.conversation_queue.push(more_queue[i]);
     }
-    console.log(this.conversation_queue);
-    console.log(this);
   }
 
 
@@ -263,6 +290,9 @@ class Level {
         this.speaker_image = new Image();
         this.speaker_image.src = "Art/" + item[1] + "/headshot.png";
       }
+      // if (item[2] != null) {
+      //   this.speaker_name = item[2];
+      // }
 
       this.interactive_1 = item[2];
       this.interactive_2 = item[3];
@@ -283,6 +313,9 @@ class Level {
         this.speaker_image = new Image();
         this.speaker_image.src = "Art/" + item[1] + "/headshot.png";
       }
+      // if (item[2] != null) {
+      //   this.speaker_name = item[2];
+      // }
 
       var sound_effect = "#conversation";
       $(sound_effect).prop("volume", 0.4);
@@ -582,12 +615,16 @@ class Level {
   }
 
 
-  drawImage(image, x, y) {
+  drawImage(image, x, y, debug_string = "") {
     //
     // Draw as though drawing centered, with 0,0 at 640/360 by default,
     // then adjusting for camera.
     //
-    this.context.drawImage(image, 640 + x - image.width / 2 - this.camera_x, 360 + y - image.height / 2 - this.camera_y)
+    try {
+      this.context.drawImage(image, 640 + x - image.width / 2 - this.camera_x, 360 + y - image.height / 2 - this.camera_y)
+    } catch(error) {
+      console.log("ERROR: failed to draw " + debug_string);
+    }
   }
 
 

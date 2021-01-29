@@ -60,6 +60,8 @@ class Game {
         this.scenes["Bathroom"] = new Level(this, "Bathroom");
       } else if (scene_name == "TitleCard") {
         this.scenes["TitleCard"] = new TitleCardScene(this);
+      } else if (scene_name == "Show") {
+        this.scenes["Show"] = new ShowScene(this);
       }
     }
 
@@ -75,6 +77,11 @@ class Game {
       this.team[0].y = 630 - 540;
       this.team[1].x = 130 - 960;
       this.team[1].y = 628 - 540;
+    } else if (scene_name == "Stage" && additional_command == "post_show_start") {
+      this.team[0].x = 0;
+      this.team[0].y = 0;
+      this.team[1].x = 30;
+      this.team[1].y = -5;
     }
   }
 

@@ -2,6 +2,22 @@
 var default_walk_speed = 6;
 var walk_frame_time = 175;
 
+var load_sprites = {}
+load_sprites["Gun"] = ["down", "up", "left", "right", "downleft", "downright", "upleft", "upright"];
+load_sprites["Tune"] = ["down", "up", "left", "right", "downleft", "downright", "upleft", "upright"];
+load_sprites["Mohawk_Man"] = ["down", "up", "left", "right"];
+load_sprites["Mohawk_Man_Ice"] = ["down", "up", "left", "right"];
+load_sprites["Mohawk_Man_Orange"] = ["down", "up", "left", "right"];
+load_sprites["Bat_Girl"] = ["down", "up"];
+load_sprites["Walking_Guy"] = ["down", "up"];
+load_sprites["Walking_Guy_Red"] = ["down", "up"];
+load_sprites["Horse"] = ["down", "up"];
+load_sprites["Walking_Lady"] = ["left", "right", "up"];
+load_sprites["Rabbit"] = ["left", "right", "up"];
+load_sprites["Rabbit_2"] = ["left", "right", "up"];
+load_sprites["Bathroom_Guy"] = ["down"];
+
+
 class Character {
   constructor(canvas, level, sprite_name, name, x=0, y=0, update=null, action=null) {
     this.canvas = canvas;
@@ -17,11 +33,13 @@ class Character {
 
     this.direction = "down";
 
+    this.walk_frame_time = walk_frame_time;
+
     this.update = update;
     this.action = action;
 
     this.images = [];
-    for (const element of ["down", "up", "left", "right", "downleft", "downright", "upleft", "upright"]) {
+    for (const element of load_sprites[sprite_name]) {
       for (const val of ["0", "1"]) {
         this.images[element + "_" + val] = new Image();
         this.images[element + "_" + val].src = "Art/" + this.sprite_name + "/" + element + "_" + val + ".png";
@@ -39,9 +57,9 @@ class Character {
   }
 
 
-  move() {
+  move(testwalk_number = 0) {
 
-    this.direction = this.level.testWalk(this, this.direction, 0);
+    this.direction = this.level.testWalk(this, this.direction, testwalk_number);
 
     if (this.direction != null) {
       this.history.push([this.x, this.y, this.direction]);
@@ -120,7 +138,7 @@ class Character {
       }
     }
 
-    this.move();
+    this.move(1);
   }
 
 
@@ -145,7 +163,7 @@ class Character {
       this.last_image_time = Date.now();
     } else if (this.last_image_time == null) {
       this.last_image_time = Date.now();
-    } else if (Date.now() - this.last_image_time > walk_frame_time) {
+    } else if (Date.now() - this.last_image_time > this.walk_frame_time) {
       if (this.current_image == f0) {
         this.current_image = f1;
       } else {
