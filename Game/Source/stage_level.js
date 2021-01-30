@@ -198,6 +198,23 @@ Level.prototype.loadStageLevel = function() {
   this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
   this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
 
+  this.makeStockCharacter("Walking_Guy_Red", "TimmyTim", "updown", [
+    ["Our father, six foot eleven,", "Walking_Guy_Red"],
+    ["Power be thy name.", "Walking_Guy_Red"],
+    ["Balhalla come", "Gun"],
+    ["For champions", "Walking_Guy_Red"],
+    ["Who practice the fundamentals.", "Gun"],
+    ["Give us this day", "Walking_Guy_Red"],
+    ["The clutchest plays", "Gun"],
+    ["And forgive us for goaltending,", "Walking_Guy_Red"],
+    ["As we forgive those who goaltend way,\n way more than us even though they\n totally should have been called on it.", "Gun"],
+    ["And lead us not into technicals", "Walking_Guy_Red"],
+    ["But deliver our free throws.", "Gun"],
+    ["For yours are the Kingdome, Cow Palace\nand Hemisfair, now and forever.", "Walking_Guy_Red"],
+    ["*Amen*", "Gun"],
+
+  ], null);
+
   this.makeStockCharacter("Horse", "Studs", "updown", [
     ["Study, study, study. That's all I ever do.", "Horse"],
     ["Well, not tonight.", "Horse"],
@@ -265,15 +282,16 @@ Level.prototype.loadStageLevel = function() {
         function() {
           dice = Math.floor(Math.random() * 100);
           if (dice < 20) {
-            self.addMoreConversation([["Fact 1", "Rabbit_2"]]);
+            self.addMoreConversation([["T.N.T. insists on using 100% renewable energy\nat every show. I don't know what that\nmeans, but it sure sounds good!", "Rabbit_2"]]);
           } else if (dice < 40) {
-            self.addMoreConversation([["Fact 2", "Rabbit_2"]]);
+            self.addMoreConversation([["T.N.T. used to use smoke effects at their shows,\nbut Rance has a smoke allergy, so they\nswitched to using laser lights.", "Rabbit_2"]]);
           } else if (dice < 60) {[]
-            self.addMoreConversation([["Fact 3", "Rabbit_2"]]);
+            self.addMoreConversation([["Chance and Lance were roommates at art school.", "Rabbit_2"]]);
           } else if (dice < 80) {
-            self.addMoreConversation([["Fact 4", "Rabbit_2"]]);
+            self.addMoreConversation([["Vance used to have a job painting cars.\nChance and Lance worked at the same\nconvenience store.", "Rabbit_2"],
+              ["Vance met Rance at a record shop where\nRance worked. Greg was a pastor.", "Rabbit_2"]]);
           } else {
-            self.addMoreConversation([["Fact 5", "Rabbit_2"]]);
+            self.addMoreConversation([["T.N.T. has had seven chart topping\nsingles so far.", "Rabbit_2"]]);
           }
         },
         function() {
@@ -283,45 +301,158 @@ Level.prototype.loadStageLevel = function() {
     self.longConversation(queue);
   });
 
+  this.makeStockCharacter("Punk_Lady", "Danica", "updown", null, function() {
+    var praises = [
+      "Yeah! I love it!",
+      "Yes! Number six at Radiohead trivia in the tri-state.",
+      "Woo! I saw Thom Yorke at a Foo Fighters concert\n once. Don't ask what I was doing there.",
+      "I know it's the T.N.T. concert,\n but I'm feelin' Radiohead today.",
+      "Thanks, now I have everything\n in its right place\n right place.",
+      "Whew. For a minute there\n I lost myself.",
+      "You pass! Judge and jury, executioner\n Judge and jury, executioner\n Judge and jury, executioner",
+      "Good job! I wish *I* was special.",
+      "I've got to praise you! I've got to\n praise you like I should\n no wait wrong band.",
+    ];
+    var disappointments = [
+      "What? No!",
+      "Uh... never feel bad for not knowing\n the lyrics of a popular song.",
+      "Boo. You probably don't even listen to music.",
+      "Ugh. Hail to the thief. Get it.",
+      "Nope. Now we separate\n Like ripples on a blank shore.",
+      "... it's making me feel ill. You crashed my party.",
+      "Broken bears\n trip me as I speak.",
+      "Don't reach out.\n We'd be a walking disaster.",
+      "Aww, YOU have not been payin' attention.",
+      "You try to sing along\n but the music's all wrong.",
+      "You don't remember, you don't remember.",
+    ];
+    var gun_struggles = [
+      "Um...",
+      "No... that's",
+      "Let's see",
+      "La la la la la",
+      "It. Dang it.",
+      "Dang. Tune played that one for me once.",
+      "Think!",
+    ]
 
+    var puzzles = [
+      ["I'll lay down the tracks", 
+        "Sandbag and hide", "Sandbag and ride",
+        "January has April's Showers",
+        "And two and two always makes up five", "And two and two always makes five"],
+      ["Shell smashed, juices flowing",
+        "Wings twitch legs are going", "Wings twitch legs are growing",
+        "Don't get sentimental",
+        "It always ends up drivel", "It all ends up drivel"],
+      ["Karma police",
+        "Arrest this man", "Arrest the man",
+        "He talks in maths",
+        "He buzzes like a fridge", "And buzzes like the fridge"],
+      ["This is what you'll get",
+        "This is what you'll get", "This is what you get", 
+        "This is what you'll get",
+        "When you mess with us", "When you mess with the"],
+      ["Yesterday I woke up",
+        "sucking on a lemon", "stuck on a lemon",
+        "Yesterday I woke up",
+        "sucking on a lemon", "sucking on lemons"],
+      ["You are not to blame for",
+        "Bittersweet distractors", "Bittersweet detractors",
+        "Dare not speak its name",
+        "Dedicated to all human beings", "Dictated to all human beings"],
+      ["When I am king",
+        "You will be first against the wall", "You'll be the first against the wall",
+        "With your opinion",
+        "Which is of no consequence at all", "It is of no consequence at all"],
+      ["Ambition makes you",
+        "look pretty ugly", "look very ugly",
+        "Kicking and squealing",
+        "Gucci little piggy", "Look little piggy"],
+      ["This machine will, will not communicate",
+        "These thoughts and the strain I am under", "These thoughts a train I am under",
+        "Be a world child, form a circle",
+        "Before we all go under", "So we can all go under"],
+      ["It slipped my mind, and for a time",
+        "I felt completely free", "I was completely free", 
+        "Oh, what a troubled silent poor boy",
+        "A pawn into a queen", "A pawn became a queen"],
+      ["But I'm a creep",
+        "I'm a weirdo", "I'm a willow",
+        "What the hell am I doin' here?",
+        "I don't belong here", "I feel so wrong here",],
+       ["When you were here before",
+        "Couldn't look you in the eye", "Couldn't look me in the eye",
+        "You're just like an angel",
+        "Your skin makes me cry", "Your soul makes me cry"],
+    ];
 
-  this.makeStockCharacter("Walking_Guy_Red", "Cleat", "updown", null, function() {
-      var game = self.game;
-      if (self.game.team[0].name == "Gun") {
-        self.shortConversation("Who are you, bear? I don't know you.", "Walking_Guy_Red");
-      } else if (self.game.team[0].name == "Tune") {
-        self.shortConversation("Yo, Tune! Long time no see! You here to see TNT?\nAren't they just balls to the wall? Pedal to the\nmetal? Yes, you agree that they are. I know it, bro.", "Walking_Guy_Red");
-      }
-  });
+    var queue = [];
+    var puzzle = puzzles[Math.floor(Math.random() * puzzles.length)];
 
-  this.makeStockCharacter("Walking_Guy_Red", "Dave G", "updown", null, function() {
-      var queue = [
-        ["Can't you see the ocean?!", "Walking_Guy_Red"]
+    if (self.game.team[0].name == "Gun") {
+      queue.push([puzzle[0], "Punk_Lady"]);
+
+      var answers = ["_interactive_", "Gun", 
+        gun_struggles[Math.floor(Math.random() * gun_struggles.length)],
+        puzzle[2],
+        function() {
+          self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
+        },
+        function() {
+          self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
+        }
       ];
-
-      if (self.game.team[0].name == "Gun") {
-        queue.push([
-          "_interactive_", "Gun", 
-          "Yes?", "... No.",
-          function() {
-            self.addMoreConversation([["Yes? No! That's not right at all.", "Walking_Guy_Red"]]);
-          },
-          function() {
-            self.addMoreConversation([["No? No, no no. I'm tryin' to engage you \nin an exchange of lyrics, my bear.", "Walking_Guy_Red"]]);
-        }]);
-      } else if (self.game.team[0].name == "Tune") {
-        queue.push([
-          "_interactive_", "Tune", 
-          "Filled with all the faith and grace!", "Filled with colors of the wind!",
-          function() {
-            self.addMoreConversation([["Yeah, dude! You know it! *PSI Rockin*", "Walking_Guy_Red"]]);
-          },
-          function() {
-            self.addMoreConversation([["That's not right.", "Walking_Guy_Red"]]);
-        }]);
+      if (Math.floor(Math.random() * 10) > 5) {
+        answers[2] = puzzle[2];
+        answers[3] = gun_struggles[Math.floor(Math.random() * gun_struggles.length)];
       }
 
-      self.longConversation(queue);
+      queue.push(answers);
+    } else if (self.game.team[0].name == "Tune") {
+      queue.push([puzzle[0], "Punk_Lady"]);
+
+      var answers = ["_interactive_", "Tune", 
+        puzzle[1],
+        puzzle[2],
+        function() {
+          var second_queue = [];
+          second_queue.push([puzzle[3], "Punk_Lady"]);
+          var second_answers = ["_interactive_", "Tune", 
+            puzzle[4],
+            puzzle[5],
+            function() {
+              self.addMoreConversation([[praises[Math.floor(Math.random() * praises.length)], "Punk_Lady"]]);
+            },
+            function() {
+              self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
+            }
+          ];
+          if (Math.floor(Math.random() * 100) >= 50) {
+            second_answers[2] = puzzle[5];
+            second_answers[3] = puzzle[4];
+            [second_answers[4], second_answers[5]] = [second_answers[5], second_answers[4]];
+          }
+          second_queue.push(second_answers);
+          self.addMoreConversation(second_queue);
+        },
+        function() {
+          self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
+        }
+      ];
+      if (Math.floor(Math.random() * 100) >= 50) {
+        answers[2] = puzzle[2];
+        answers[3] = puzzle[1];
+        [answers[4], answers[5]] = [answers[5], answers[4]];
+      }
+
+      queue.push(answers);
+    }
+
+
+
+
+    self.longConversation(queue);
   });
 
   this.game.setMusic("deep_rough", "loop");

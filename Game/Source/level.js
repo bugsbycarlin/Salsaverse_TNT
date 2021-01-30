@@ -366,7 +366,7 @@ class Level {
           console.log("choice 0");
           this.action_1();
         } else {
-          console.log("choie 1");
+          console.log("choice 1");
           this.action_2();
         }
         console.log(this.conversation_queue);
