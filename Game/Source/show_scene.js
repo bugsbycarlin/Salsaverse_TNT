@@ -11,6 +11,8 @@ class ShowScene {
     this.scene_name = "Show";
 
     this.characters = [];
+    this.bouncers = [];
+    this.dancers = [];
 
     this.bpm = 105;
     this.period = 2.0 * 60000.0 / 105.0;
@@ -19,6 +21,8 @@ class ShowScene {
     this.exit_alpha = 0.01;
 
     this.phase = 1;
+
+    this.dance = "right";
   }
 
 
@@ -91,6 +95,20 @@ class ShowScene {
       character.vx = 0;
       character.floor_y = character.y;
     }
+
+    this.bouncers.push(new Character(canvas, this, "Bathroom_Guy", "Bathroom_Guy", 680 - 960, 470 - 540, null, null));
+    this.bouncers.push(new Character(canvas, this, "Bathroom_Guy", "Bathroom_Guy", 1210 - 960, 470 - 540, null, null));
+  
+    this.dancers.push(new Character(canvas, this, "TNT_Chance", "Chance", 710 - 960, 310 - 540, null, null));
+    this.dancers.push(new Character(canvas, this, "TNT_Lance", "Lance", 835 - 960, 310 - 540, null, null));
+    this.dancers.push(new Character(canvas, this, "TNT_Rance", "Rance", 960 - 960, 310 - 540, null, null));
+    this.dancers.push(new Character(canvas, this, "TNT_Vance", "Vance", 1085 - 960, 310 - 540, null, null));
+    this.dancers.push(new Character(canvas, this, "TNT_Greg", "Greg", 1210 - 960, 310 - 540, null, null));
+    for (var i = 0; i < 5; i++) {
+      this.dancers[i].vy = 0;
+      this.dancers[i].vx = 0;
+      this.dancers[i].floor_y = this.dancers[i].y;
+    }
   }
 
 
@@ -150,7 +168,7 @@ class ShowScene {
       this.fade_alpha = 0.83;
     }
 
-    if (Date.now() - this.start_time > 46000) {
+    if (Date.now() - this.start_time > 45400) {
       this.exit_alpha += 0.02;
       if (this.exit_alpha > 1.0) this.exit_alpha = 1.0;
     }
@@ -173,6 +191,38 @@ class ShowScene {
           character.vx = -0.5;
         }
       }
+
+      for (var i = 0; i < 5; i++) {
+        var image = "down_0";
+        var shift = 1;
+        if (this.dance == "left") {
+          shift = -1;
+          image = "down_1";
+        } 
+        this.dancers[i].vx += shift;
+        this.dancers[i].current_image = image;
+
+        if (Date.now() - this.start_time > 9430) {
+          this.dancers[i].vy = Math.floor(Math.random() * 9) - 4;
+          if (this.dancers[i].y < -400) {
+            this.dancers[i].vy = 2;
+          }
+          if (this.dancers[i].y > 0) {
+            this.dancers[i].vy = -2;
+          }
+        }
+      }
+      if (this.dance == "right") {
+        this.dance = "left";
+      } else {
+        this.dance = "right";
+      }
+    }
+
+    if (Date.now() - this.start_time > 45400) {
+      for (var i = 0; i < 5; i++) {
+        this.dancers[i].vy -= (1.0 + 0.2 * i);
+      }
     }
 
     for (var i = 0; i < this.characters.length; i++) {
@@ -186,7 +236,11 @@ class ShowScene {
       }
     }
 
-
+    for (var i = 0; i < 5; i++) {
+      this.dancers[i].x += this.dancers[i].vx;
+      this.dancers[i].vx *= 0.9;
+      this.dancers[i].y += this.dancers[i].vy;
+    }
   }
 
   
@@ -195,6 +249,9 @@ class ShowScene {
     this.context.fillRect(0,0,this.canvas.width,this.canvas.height);
 
     this.drawImage(this.level_image, 0, 0, "level");
+
+    this.drawImage(this.bouncers[0].images[this.bouncers[0].current_image], this.bouncers[0].x, this.bouncers[0].y);
+    this.drawImage(this.bouncers[1].images[this.bouncers[1].current_image], this.bouncers[1].x, this.bouncers[1].y)
 
     for (var i = 0; i < this.characters.length; i++) {
       var character = this.characters[i];
@@ -231,6 +288,19 @@ class ShowScene {
       this.drawImage(this.tnt_3_grey, 930 - 960, 120 - 540);
     } else {
       this.drawImage(this.tnt_3, 930 - 960, 120 - 540);
+    }
+
+    for (var i = 0; i < 5; i++) {
+      var image = this.dancers[i].images[this.dancers[i].current_image]
+      drawLine(
+        this.context,
+        "#000000",
+        640 + this.dancers[i].x - this.camera_x,
+        -10,
+        640 + this.dancers[i].x - this.camera_x,
+        360 + this.dancers[i].y - this.camera_y,
+      )
+      this.drawImage(image, this.dancers[i].x, this.dancers[i].y);
     }
 
     if (this.phase == 1) {
@@ -288,7 +358,7 @@ class ShowScene {
       this.context.translate(-1300, -180);
     }
 
-    if (current_time >= 46000) {
+    if (current_time >= 45400) {
       this.context.globalAlpha = Math.max(0,Math.min(1.0,this.exit_alpha));
       this.context.drawImage(black_screen, 0, 0);
       this.context.globalAlpha = 1.0;

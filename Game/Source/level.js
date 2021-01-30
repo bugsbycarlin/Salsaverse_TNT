@@ -10,13 +10,18 @@ class Level {
 
     this.team = this.game.team;
 
-    console.log
+    console.log("i am here");
     this.scene_name = scene_name;
+    console.log(this.scene_name);
     if (this.scene_name == "Stage") {
       this.loadLevel = this.loadStageLevel;
     } else if (this.scene_name == "Bathroom") {
       this.loadLevel = this.loadBathroomLevel;
+    } else if (this.scene_name == "Backstage") {
+      this.loadLevel = this.loadBackstageLevel;
     }
+    console.log("level loaded");
+    console.log(this);
 
     this.fade_alpha = 0;
   }
@@ -115,30 +120,30 @@ class Level {
 
     // Debug lines
     
-    for (var i = 0; i < this.lines.length; i++) {
-      var line = this.lines[i];
-      drawLine(
-        this.context,
-        line.color,
-        640 + line.x1 - this.camera_x,
-        360 + line.y1 - this.camera_y,
-        640 + line.x2 - this.camera_x,
-        360 + line.y2 - this.camera_y,
-      )
-    }
+    // for (var i = 0; i < this.lines.length; i++) {
+    //   var line = this.lines[i];
+    //   drawLine(
+    //     this.context,
+    //     line.color,
+    //     640 + line.x1 - this.camera_x,
+    //     360 + line.y1 - this.camera_y,
+    //     640 + line.x2 - this.camera_x,
+    //     360 + line.y2 - this.camera_y,
+    //   )
+    // }
 
-    for (var i = 0; i < this.doors.length; i++) {
-      var door = this.doors[i];
-      drawLine(
-        this.context,
-        door.color,
-        // "FF0000",
-        640 + door.x1 - this.camera_x,
-        360 + door.y1 - this.camera_y,
-        640 + door.x2 - this.camera_x,
-        360 + door.y2 - this.camera_y,
-      )
-    }
+    // for (var i = 0; i < this.doors.length; i++) {
+    //   var door = this.doors[i];
+    //   drawLine(
+    //     this.context,
+    //     door.color,
+    //     // "FF0000",
+    //     640 + door.x1 - this.camera_x,
+    //     360 + door.y1 - this.camera_y,
+    //     640 + door.x2 - this.camera_x,
+    //     360 + door.y2 - this.camera_y,
+    //   )
+    // }
 
     this.renderConversation();
 
@@ -348,6 +353,10 @@ class Level {
         if (this.conversation_queue.length > 0) {
           this.conversationStep();
         } else {
+          if (this.endConversationAction != null) {
+            this.endConversationAction();
+            this.endConversationAction = null;
+          }
           this.full_text = null;
           this.partial_text = null;
           this.mode = "active";
@@ -364,6 +373,10 @@ class Level {
         if (this.conversation_queue.length > 0) {
           this.conversationStep();
         } else {
+          if (this.endConversationAction != null) {
+            this.endConversationAction();
+            this.endConversationAction = null;
+          }
           this.full_text = null;
           this.partial_text = null;
           this.mode = "active";
@@ -414,7 +427,7 @@ class Level {
       if (object.name != character.name && object.team != character.team) {
         var x3 = object.x;
         var y3 = object.y + 40;
-        if (distance(x2, y2, x3, y3) <= object.radius) {
+        if (distance(x2, y2, x3, y3) <= object.radius && distance(x2, y2, x3, y3) < distance(x1, y1, x3, y3)) {
           return null;
         }
       }
@@ -427,10 +440,10 @@ class Level {
           var door = this.doors[i];
           var self = this;
           if (door.lineTest(x1, y1, x2, y2)) {
-            console.log("bumping a door");
-            console.log(door.allowed_directions);
-            console.log(door.action);
-            console.log(direction);
+            // console.log("bumping a door");
+            // console.log(door.allowed_directions);
+            // console.log(door.action);
+            // console.log(direction);
             if (door.allowed_directions.includes(direction)) {
               console.log("oh, bumping doors the right way is tight!");
               door.flashColor("#0000FF", 500);
@@ -447,10 +460,10 @@ class Level {
           line.flashColor("#0000FF", 500);
 
           var alt_direction = direction;
-          console.log("Crossing a line");
-          console.log("Direction " + direction + ", test " + test_number);
-          console.log(x1 + "," + y1 + " - " + x2 + "," + y2)
-          console.log(line.snap_slope);
+          // console.log("Crossing a line");
+          // console.log("Direction " + direction + ", test " + test_number);
+          // console.log(x1 + "," + y1 + " - " + x2 + "," + y2)
+          // console.log(line.snap_slope);
 
           if (line.snap_slope == 0) {
             if (direction == "up" || direction == "down") {

@@ -18,6 +18,11 @@ load_sprites["Walking_Lady"] = ["left", "right", "up"];
 load_sprites["Rabbit"] = ["left", "right", "up"];
 load_sprites["Rabbit_2"] = ["left", "right", "up"];
 load_sprites["Bathroom_Guy"] = ["down"];
+load_sprites["TNT_Chance"] = ["down"];
+load_sprites["TNT_Lance"] = ["down"];
+load_sprites["TNT_Vance"] = ["down"];
+load_sprites["TNT_Rance"] = ["down"];
+load_sprites["TNT_Greg"] = ["down"];
 
 
 class Character {

@@ -58,8 +58,12 @@ class Game {
         this.scenes["Stage"] = new Level(this, "Stage");
       } else if (scene_name == "Bathroom") {
         this.scenes["Bathroom"] = new Level(this, "Bathroom");
+      } else if (scene_name == "Backstage") {
+        this.scenes["Backstage"] = new Level(this, "Backstage");
       } else if (scene_name == "TitleCard") {
         this.scenes["TitleCard"] = new TitleCardScene(this);
+      } else if (scene_name == "Venue") {
+        this.scenes["Venue"] = new VenueScene(this);
       } else if (scene_name == "Show") {
         this.scenes["Show"] = new ShowScene(this);
       }
@@ -82,6 +86,11 @@ class Game {
       this.team[0].y = 0;
       this.team[1].x = 30;
       this.team[1].y = -5;
+    } else if (scene_name == "Stage" && additional_command == "backstage_start") {
+      this.team[0].x = 260 - 960;
+      this.team[0].y = 520 - 540;
+      this.team[1].x = 270 - 960;
+      this.team[1].y = 515 - 540;
     }
   }
 
@@ -123,9 +132,7 @@ class Game {
 
 
   stopMusic() {
-    console.log("A");
     if (this.music != null) {
-      console.log("B");
       this.music.trigger("pause");
       this.music_name = null;
     }
@@ -161,14 +168,4 @@ function initialize() {
   game = new Game();
 }
 
-
-// function distance(x1, y1, x2, y2) {
-//   var x_diff = Math.abs(x1 - x2);
-//   var y_diff = Math.abs(y1 - y2);
-//   return Math.sqrt(x_diff*x_diff + y_diff*y_diff);
-// }
-
-// function insideEllipse(e_x, e_y, e_width, e_height, x, y) {
-//   return Math.pow(x - e_x, 2) / Math.pow(e_width, 2) + Math.pow(y - e_y, 2) / Math.pow(e_height, 2) <= 1;
-// }
 

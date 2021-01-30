@@ -1,5 +1,7 @@
 
 Level.prototype.loadStageLevel = function() {
+  var self = this;
+
   this.level_image = new Image();
   this.level_image.src = "Art/Levels/theater_stage.png";
 
@@ -15,9 +17,9 @@ Level.prototype.loadStageLevel = function() {
   this.team[1].level = this;
   this.team[1].history = [];
 
-  this.characterBounds = [300 - 960, 1630 - 960, 500 - 540, 1040 - 540];
+  // this.game.properties["have_seen_show"] = 1
 
-  var self = this;
+  this.characterBounds = [300 - 960, 1630 - 960, 500 - 540, 1040 - 540];
   
   // The world's most public toilet
   if (self.game.properties["have_seen_show"] == null) {
@@ -74,9 +76,37 @@ Level.prototype.loadStageLevel = function() {
     function() {
       if (self.game.properties["have_seen_show"] == null) {
         self.shortConversation("Can't go backstage before the show.", "Bathroom_Guy");
+      } else {
+        self.mode = "fade_out";
+        self.fade_alpha = 0;
+        setTimeout(function() {
+          this.game.gotoScene("Backstage");
+        }, 800);
       }
     }
   ));
+
+  if (this.game.properties["have_seen_show"] != null && this.game.properties["have_been_backstage"] == null) {
+    for (i = 0; i < 4; i++) {
+      this.npcs.push(new Character(canvas, this, "Bathroom_Guy", "Special_Guard", 190 + 25 * i - 960, 570 - 25 * i - 540, null, function() {
+        var game = self.game;
+        if (self.game.team[0].name == "Gun") {
+          self.shortConversation("I'm sorry, sir. You're not allowed backstage.", "Bathroom_Guy");
+        } else if (self.game.team[0].name == "Tune") {
+          self.shortConversation("Ah, are you Tune?\nThe band is eager to meet you.\nPlease, come on in.", "Bathroom_Guy");
+          for (var i = 0; i < self.npcs.length; i++) {
+            if (self.npcs[i].name == "Special_Guard") {
+              self.npcs[i].update = function() {
+                this.y = this.y - 5;
+              }
+              self.npcs[i].action = null;
+            }
+          }
+        }
+      }));
+    }
+  }
+
 
   // Exit door
   var self = this;
@@ -123,7 +153,14 @@ Level.prototype.loadStageLevel = function() {
               function() {
                 self.addMoreConversation([["Are you the boss or something?\nWell, okay, let's start the show.", "Bathroom_Guy"]]);
                 self.game.properties["have_seen_show"] = 1;
-                self.game.gotoScene("Show")
+                // self.game.gotoScene("Show")
+                self.endConversationAction = function() {
+                  self.mode = "fade_out";
+                  self.fade_alpha = 0;
+                  setTimeout(function() {
+                    self.game.gotoScene("Show");
+                  }, 800);
+                }
               },
               function() {
                 self.addMoreConversation([["Okay.", "Bathroom_Guy"]]);
