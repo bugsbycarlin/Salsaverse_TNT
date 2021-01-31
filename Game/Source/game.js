@@ -60,6 +60,8 @@ class Game {
         this.scenes["Bathroom"] = new Level(this, "Bathroom");
       } else if (scene_name == "Backstage") {
         this.scenes["Backstage"] = new Level(this, "Backstage");
+      } else if (scene_name == "End") {
+        this.scenes["End"] = new EndScene(this);
       } else if (scene_name == "TitleCard") {
         this.scenes["TitleCard"] = new TitleCardScene(this);
       } else if (scene_name == "Venue") {

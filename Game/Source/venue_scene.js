@@ -24,8 +24,8 @@ class VenueScene {
     this.start_time = Date.now();
     this.mode = "fade_in";
 
-    this.characters.push(new Character(canvas, this, "Gun", "Gun", 970, 230, null, null));
-    this.characters.push(new Character(canvas, this, "Tune", "Tune", 1020, 230, null, null));
+    this.characters.push(new Character(canvas, this, "Gun", "Gun", 1280, 470, null, null));
+    this.characters.push(new Character(canvas, this, "Tune", "Tune", 1330, 470, null, null));
 
 
     // setTimeout(function() {
@@ -37,15 +37,22 @@ class VenueScene {
   update() {
     if (this.mode == "fade_in" || this.mode == "active") {
       
-
+      
       for (var i = 0; i < this.characters.length; i++) {
         var character = this.characters[i];
-        character.x -= character.walk_speed;
-        character.direction = "left";
+        if (character.x > 830) {
+          character.x -= character.walk_speed;
+          character.direction = "left";
+        } else {
+          character.y -= 0.707 * character.walk_speed;
+          character.x -= 0.707 * character.walk_speed;
+          character.direction = "upleft";
+        }
         character.walkAnimation();
       }
+      
       var self = this;
-      if (this.characters[0].x <= 500) {
+      if (this.characters[0].y <= 200) {
         self.mode = "fade_out";
         self.fade_alpha = 0;
         setTimeout(function() {

@@ -317,9 +317,9 @@ class Level {
 
       this.marker_blink = Date.now();
 
-      var sound_effect = "#interactive";
-      $(sound_effect).prop("volume", 0.4);
-      $(sound_effect).trigger("play");
+      // var sound_effect = "#interactive";
+      // $(sound_effect).prop("volume", 0.4);
+      // $(sound_effect).trigger("play");
     } else {
       this.full_text = item[0]
       this.partial_text = "";
@@ -359,7 +359,9 @@ class Level {
           }
           this.full_text = null;
           this.partial_text = null;
-          this.mode = "active";
+          if (this.mode == "conversation") {
+            this.mode = "active";
+          }
         }
       } else {
         if (this.interactive_choice == 0) {
@@ -392,6 +394,8 @@ class Level {
     var x2 = character.x;
     var y2 = character.y + 40; // footing
 
+    // Calculate the future walk position; we'll be using
+    // Both the old and new positions in calculations below.
     if (direction == "upright") {
       y2 -= 0.707 * character.walk_speed;
       x2 += 0.707 * character.walk_speed; 
@@ -414,14 +418,10 @@ class Level {
       x2 += character.walk_speed;
     }
 
-    // for (var i = 0; i < this.things.length; i++) {
-    //   var thing = this.things[i];
-    //   var x3 = thing.x;
-    //   var y3 = thing.y + 40;
-    //   if (distance(x2, y2, x3, y3) <= thing.radius) {
-    //     return null;
-    //   }
-    // }
+    // Check all the other draw objects (npcs, characters, things).
+    // If they're not too close, OR they're the same name character,
+    // OR they're on the same team, or moving would take you further
+    // away from them, it's okay to proceed. Otherwise return null.
     for (var i = 0; i < this.drawObjects.length; i++) {
       var object = this.drawObjects[i];
       if (object.name != character.name && object.team != character.team) {
@@ -435,17 +435,13 @@ class Level {
 
     if (x2 != x1 || y2 != y1) {
 
+      // Check all the doors
       if (character.name == "Gun" || character.name == "Tune") {
         for (var i = 0; i < this.doors.length; i++) {
           var door = this.doors[i];
           var self = this;
           if (door.lineTest(x1, y1, x2, y2)) {
-            // console.log("bumping a door");
-            // console.log(door.allowed_directions);
-            // console.log(door.action);
-            // console.log(direction);
             if (door.allowed_directions.includes(direction)) {
-              console.log("oh, bumping doors the right way is tight!");
               door.flashColor("#0000FF", 500);
               door.action();
               return null;
@@ -454,58 +450,77 @@ class Level {
         }
       }
 
-      for (var i = 0; i < this.lines.length; i++) {
-        var line = this.lines[i];
-        if (line.lineTest(x1, y1, x2, y2)) {
-          line.flashColor("#0000FF", 500);
+      // Two times, check all the walls, and potentially either change the direction
+      // or set it to null. We do this two times to account for A changes which could
+      // need nullification by B, and vice versa.
+      var alt_direction = direction;
+      var line_collision = false;
+      for (var twice = 0; twice < 2; twice++) {
+        for (var i = 0; i < this.lines.length; i++) {
+          var line = this.lines[i];
+          if (line.lineTest(x1, y1, x2, y2)) {
+            line_collision = true;
+            line.flashColor("#0000FF", 500);
 
-          var alt_direction = direction;
-          // console.log("Crossing a line");
-          // console.log("Direction " + direction + ", test " + test_number);
-          // console.log(x1 + "," + y1 + " - " + x2 + "," + y2)
-          // console.log(line.snap_slope);
-
-          if (line.snap_slope == 0) {
-            if (direction == "up" || direction == "down") {
-              alt_direction = null;
-            } else if (direction == "upleft" || direction == "downleft") {
-              alt_direction = "left";
-            } else if (direction == "upright" || direction == "downright") {
-              alt_direction = "right";
-            }
-          } else if (line.snap_slope == 90) {
-            if (direction == "left" || direction == "right") {
-              alt_direction = null;
-            } else if (direction == "upleft" || direction == "upright") {
-              alt_direction = "up";
-            } else if (direction == "downleft" || direction == "downright") {
-              alt_direction = "down";
-            }
-          } else if (line.snap_slope == 45) {
-            if (direction == "downright" || direction == "upleft") {
-              alt_direction = null;
-            } else if (direction == "up" || direction == "right") {
-              alt_direction = "upright";
-            } else if (direction == "down" || direction == "left") {
-              alt_direction = "downleft";
-            }
-          } else if (line.snap_slope == -45) {
-            if (direction == "downleft" || direction == "upright") {
-              alt_direction = null;
-            } else if (direction == "up" || direction == "left") {
-              alt_direction = "upleft";
-            } else if (direction == "down" || direction == "right") {
-              console.log("Switching to downright");
-              alt_direction = "downright";
+            // if we're already stopped, don't keep going.
+            // never stop never stopping, Matthew.
+            // What I mean is, if the direction has already been changed to null,
+            // There's no point in re-investigating and accidentally changing it back.
+            if (alt_direction != null) {
+              if (line.allowed.includes(alt_direction)) {
+                console.log("Ref: I'll allow it because it's away from the line.");
+              } else {
+                if (line.snap_slope == 0) {
+                  if (alt_direction == "up" || alt_direction == "down") {
+                    alt_direction = null;
+                  } else if (alt_direction == "upleft" || alt_direction == "downleft") {
+                    alt_direction = "left";
+                  } else if (alt_direction == "upright" || alt_direction == "downright") {
+                    alt_direction = "right";
+                  }
+                } else if (line.snap_slope == 90) {
+                  if (alt_direction == "left" || alt_direction == "right") {
+                    alt_direction = null;
+                  } else if (alt_direction == "upleft" || alt_direction == "upright") {
+                    alt_direction = "up";
+                  } else if (alt_direction == "downleft" || alt_direction == "downright") {
+                    alt_direction = "down";
+                  }
+                } else if (line.snap_slope == 45) {
+                  if (alt_direction == "downright" || alt_direction == "upleft") {
+                    alt_direction = null;
+                  } else if (alt_direction == "up" || alt_direction == "right") {
+                    alt_direction = "upright";
+                  } else if (alt_direction == "down" || alt_direction == "left") {
+                    alt_direction = "downleft";
+                  }
+                } else if (line.snap_slope == -45) {
+                  if (alt_direction == "downleft" || alt_direction == "upright") {
+                    alt_direction = null;
+                  } else if (alt_direction == "up" || alt_direction == "left") {
+                    alt_direction = "upleft";
+                  } else if (alt_direction == "down" || alt_direction == "right") {
+                    alt_direction = "downright";
+                  }
+                }
+              }
             }
           }
+        }
+      }
 
-          if (test_number == 0) return this.testWalk(character, alt_direction, 1);
-          if (test_number == 1) return alt_direction;
+      if (line_collision) {
+        // finally, return the chance of direction if and only if we can draw it
+        if (load_sprites[character.sprite_name].includes(alt_direction)) {
+          return alt_direction;
+        } else {
+          // otherwise return null
+          return null;
         }
       }
     }
 
+    // if nothing change or was returned, return the original direction as safe
     return direction;
   }
 
@@ -679,7 +694,9 @@ class Level {
           this.interactive_choice = (this.interactive_choice + 1) % 2;
 
           // TO DO sound here
-          var sound_effect = "#selection";
+          var sound_effect = "#down";
+          if (ev.key == "ArrowUp") sound_effect = "#up";
+          $(sound_effect).load();
           $(sound_effect).prop("volume", 0.4);
           $(sound_effect).trigger("play");
         }

@@ -1,7 +1,7 @@
 
 
 class Line {
-  constructor(x1, y1, x2, y2, label="") {
+  constructor(x1, y1, x2, y2, allowed = []) {
     if (x2 < x1) {
       this.x1 = x2
       this.y1 = y2
@@ -37,19 +37,19 @@ class Line {
       this.y2 = temp;
     }
 
-    this.label = label;
+    this.allowed = allowed;
 
     this.color = "#00FF00";
+    this.original_color = "#00FF00";
 
     //this.flashColor("#0000FF", 2000);
   }
 
   flashColor(color, duration) {
-    this.old_color = this.color;
     this.color = color;
     var self = this;
     setTimeout(function() {
-      self.color = self.old_color;
+      self.color = self.original_color;
     }, duration);
   }
 
@@ -79,10 +79,6 @@ class Line {
       Math.floor(((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4))
           / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)))
     ];
-    // if (this.label == "dingus") {
-    //   console.log("cross " + x5 + "," + y5);
-    //   console.log("bearing " + x3 + "," + y3 + " - " + x4 + "," + y4);
-    // }
 
     var in_segment = true;
     var g = 4; // thickness fudge to beat jittering

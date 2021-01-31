@@ -17,8 +17,6 @@ Level.prototype.loadStageLevel = function() {
   this.team[1].level = this;
   this.team[1].history = [];
 
-  // this.game.properties["have_seen_show"] = 1
-
   this.characterBounds = [300 - 960, 1630 - 960, 500 - 540, 1040 - 540];
   
   // The world's most public toilet
@@ -29,24 +27,24 @@ Level.prototype.loadStageLevel = function() {
   }
 
   //Stage verticals
-  this.lines.push(new Line(750 - 960, 520 - 540, 1145 - 960, 520 - 540));
-  this.lines.push(new Line(1165 - 960, 480 - 540, 1655 - 960, 480 - 540));
-  this.lines.push(new Line(235 - 960, 480 - 540, 730 - 960, 480 - 540));
+  this.lines.push(new Line(750 - 960, 520 - 540, 1145 - 960, 520 - 540, ["down", "downleft", "downright"]));
+  this.lines.push(new Line(1165 - 960, 480 - 540, 1655 - 960, 480 - 540, ["down", "downleft", "downright"]));
+  this.lines.push(new Line(235 - 960, 480 - 540, 730 - 960, 480 - 540, ["down", "downleft", "downright"]));
 
   //Stage flanges at 45 degrees
-  this.lines.push(new Line(1145 - 960, 520 - 540, 1185 - 960, 480 - 540));
-  this.lines.push(new Line(750 - 960, 520 - 540, 705 - 960, 475 - 540));
+  this.lines.push(new Line(1145 - 960, 520 - 540, 1185 - 960, 480 - 540, ["down", "right", "downright"]));
+  this.lines.push(new Line(750 - 960, 520 - 540, 705 - 960, 475 - 540, ["down", "left", "downleft"]));
 
   //Side walls at 45 degrees
-  this.lines.push(new Line(0 - 960, 725 - 540, 255 - 960, 480 - 540, "dingus"));
-  this.lines.push(new Line(1635 - 960, 480 - 540, 1920 - 960, 765 - 540));
+  this.lines.push(new Line(0 - 960, 725 - 540, 255 - 960, 480 - 540, ["down", "right", "downright"]));
+  this.lines.push(new Line(1635 - 960, 480 - 540, 1920 - 960, 765 - 540, ["down", "left", "downleft"]));
 
   // Verticals at bottom
-  this.lines.push(new Line(30 - 960, 695 - 540, 30 - 960, 1150 - 540));
-  this.lines.push(new Line(1890 - 960, 730 - 540, 1890 - 960, 1150 - 540));
+  this.lines.push(new Line(30 - 960, 695 - 540, 30 - 960, 1150 - 540, ["right", "downright", "upright"]));
+  this.lines.push(new Line(1890 - 960, 730 - 540, 1890 - 960, 1150 - 540, ["left", "downleft", "upleft"]));
 
   // Horizontal at bottom
-  this.lines.push(new Line(0 - 960, 1050 - 540, 1920 - 960, 1050 - 540));
+  this.lines.push(new Line(0 - 960, 1050 - 540, 1920 - 960, 1050 - 540, ["up", "upleft", "upright"]));
 
   // Bathroom door
   var self = this;
@@ -137,7 +135,7 @@ Level.prototype.loadStageLevel = function() {
 
           if (self.game.properties["asked_first_guy"] == null) {
             queue.push([
-              "_interactive_", "Gun", 
+              "_interactive_", "Tune", 
               "Yes", "No",
               function() {
                 self.addMoreConversation([["Well, it's not my job to start anything.\nAsk the other guy.", "Bathroom_Guy"]]);
@@ -184,19 +182,73 @@ Level.prototype.loadStageLevel = function() {
 
   if (self.game.properties["have_seen_show"] == null) {
     this.makeStockCharacter("Mohawk_Man", "Eldridge", "updownleftright", [["BROOOOOoohhhh wait I left my keys in the car.", "Mohawk_Man"]], null);
-    this.makeStockCharacter("Mohawk_Man_Orange", "John", "updownleftright", [["T.N.T. PARTY!", "Mohawk_Man_Orange"]], null);
     this.makeStockCharacter("Mohawk_Man_Ice", "Carl", "updownleftright", [
       ["WOOO HAAAAA! T.N.T. CONCERT! I am so psyched!", "Mohawk_Man_Ice"],
       ["So psyched.", "Mohawk_Man_Ice"],
       ["So psyched...", "Mohawk_Man_Ice"],
       ["... I think I psyched myself out.", "Mohawk_Man_Ice"]], null);
     this.makeStockCharacter("Punk_Lady_2", "Jenn", "updown", [["I've seen these guys three times already.\nI'm expecting a really good show.", "Punk_Lady_2"]], null);
+    this.makeStockCharacter("Mohawk_Man_Orange", "John", "updownleftright", null, function() {
+      if (self.game.team[0].name == "Gun") {
+        self.longConversation([["T.N.T. PARTY!", "Mohawk_Man_Orange"], ["Hey, let me speak to that other bear.", "Mohawk_Man_Orange"]]);
+      } else if (self.game.team[0].name == "Tune") {
+        self.longConversation([
+          ["T.N.T. PARTY-Oh hey Brah. Did you see my \nmessage on the board the other day?", "Mohawk_Man_Orange"],
+          ["I break down different T.N.T. dance steps\nand show how you can follow them by\nlearning a simple pattern.", "Mohawk_Man_Orange"],
+          ["Yeah. I'm gonna try them during the show. \nLet me know how I did.", "Tune"],
+          ["Cool. T.N.T. PARTY!", "Mohawk_Man_Orange"],
+          ["T.N.T. PARTY!", "Tune"],
+          ["T.N.T. PARTY!", "Mohawk_Man_Orange"],
+        ]);
+      }
+    });
+
+    this.makeStockCharacter("Rabbit", "Sacky", "leftright", null, function() {
+      self.longConversation([
+        ["Look at these ears! I'm gonna hear every little\nbit of this show.", "Rabbit"],
+        ["Except... I'm suddenly worried I'm gonna damage\nmy hearing.", "Rabbit"],
+        ["Um.", "Rabbit"],
+        ["Um...", "Rabbit"],
+        ["Bye.", "Rabbit"],
+      ]);
+      self.game.properties["rabbit_wigged_out"] = 1;
+      this.walk_frame_time *= 0.5;
+      this.update = function() { this.x += this.walk_speed * 4; this.direction = "right"; this.walkAnimation(); }
+    });
+
   }
 
-  this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
-  this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
-  this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
-  this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
+  if (self.game.properties["recruited_lady"] == null) {
+    for (var i = 0; i < 4; i++) {
+      if (self.game.properties["gun_has_an_idea"] == null) {
+        this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", [["I took a lot of shrooms, and now I feel like\nI'm in four places at once.", "Walking_Lady"], ["I bet all four of me would make excellent\nbackup dancers.", "Walking_Lady"]], null);
+      } else {
+        this.makeStockCharacter("Walking_Lady", "Sharon", "leftright", null, function() {
+          var queue = [];
+          if (self.game.team[0].name == "Gun") {
+            self.shortConversation("Where's the other bear? He was... purple?\nOr rainbow, white, or something?", "Walking_Lady");
+          } else if (self.game.team[0].name == "Tune") {
+            self.game.properties["recruited_lady"] = 1;
+            for (var m = 0; m < self.drawObjects.length; m++) {
+              var potential_sharon = self.drawObjects[m];
+              if (potential_sharon.name == "Sharon") {
+                potential_sharon.walk_frame_time *= 0.5;
+                potential_sharon.update = function() { this.x -= this.walk_speed * 4; this.direction = "left"; this.walkAnimation(); }
+              }
+            }
+            queue = [
+              ["You want to join T.N.T?", "Tune"],
+              ["I must be tripping harder than I thought.", "Walking_Lady"],
+              ["Yeah, but you want to join the band?", "Tune"],
+              ["Sure. I'm a good dancer.", "Walking_Lady"],
+              ["Okay. Just head backstage.", "Tune"]
+            ];
+            self.longConversation(queue);
+          }
+        });
+      }
+    }
+  }
 
   this.makeStockCharacter("Walking_Guy_Red", "TimmyTim", "updown", [
     ["Our father, six foot eleven,", "Walking_Guy_Red"],
@@ -215,11 +267,15 @@ Level.prototype.loadStageLevel = function() {
 
   ], null);
 
-  this.makeStockCharacter("Horse", "Studs", "updown", [
-    ["Study, study, study. That's all I ever do.", "Horse"],
-    ["Well, not tonight.", "Horse"],
-    ["Tonight...", "Horse"],
-    ["This horse is gonna PARTYYYYY!", "Horse"]], null);
+  if (self.game.properties["have_seen_show"] == null) {
+    this.makeStockCharacter("Horse", "Studs", "updown", [
+      ["Study, study, study. That's all I ever do.", "Horse"],
+      ["Well, not tonight.", "Horse"],
+      ["Tonight...", "Horse"],
+      ["This horse is gonna PARTYYYYY!", "Horse"]], null);
+  } else {
+    this.makeStockCharacter("Horse", "Studs", "updown", [["I. Partied.", "Horse"]], null);
+  }
 
   this.makeStockCharacter("Walking_Guy", "Jones", "updown", null, function() {
       var game = self.game;
@@ -242,64 +298,74 @@ Level.prototype.loadStageLevel = function() {
       }
   });
 
-  this.makeStockCharacter("Rabbit", "Sacky", "leftright", null, function() {
-    self.longConversation([
-      ["Look at these ears! I'm gonna hear every little\nbit of this show.", "Rabbit"],
-      ["Except... I'm suddenly worried I'm gonna damage\nmy hearing.", "Rabbit"],
-      ["Um.", "Rabbit"],
-      ["Um...", "Rabbit"],
-      ["Bye.", "Rabbit"],
-    ]);
-    self.game.properties["rabbit_wigged_out"] = 1;
-    this.walk_frame_time *= 0.5;
-    this.update = function() { this.x += this.walk_speed * 4; this.direction = "right"; this.walkAnimation(); }
-  });
-
-  this.makeStockCharacter("Rabbit_2", "Benny", "leftright", null, function() {
-    var queue = [];
-    if (self.game.team[0].name == "Tune" && self.game.properties["met_fact_rabbit"] == 1) {
-      queue.push(["Oh man, you're so cool. Do you...think I could\nbe a pop rocker singer someday?", "Rabbit_2"]);
-      queue.push([
-        "_interactive_", "Tune", 
-        "Yeah, absolutely!", "Oh, um... Maybe stick to your skills.",
-        function() {
-          self.addMoreConversation([["Really? Mister, you just about double made my day!", "Rabbit_2"]]);
-        },
-        function() {
-          self.addMoreConversation([["Yeah, you're... you're probably right.", "Rabbit_2"]]);
-      }]);
-    } else {
-      if (self.game.properties["met_fact_rabbit"] == null) {
-        self.game.properties["met_fact_rabbit"] = 1;
-        queue.push(["Buster, I'm not cool. In fact I'm a dork.\nBut I do know everything about T.N.T.\nDo you want to hear some T.N.T. facts?", "Rabbit_2"]);
+  if (self.game.properties["recruited_rabbit"] == null) {
+    this.makeStockCharacter("Rabbit_2", "Benny", "leftright", null, function() {
+      var queue = [];
+      if (self.game.properties["gun_has_an_idea"] == 1) {
+        if (self.game.team[0].name == "Gun") {
+          self.shortConversation("No offense, Mister, but can I talk to the cool guy?", "Rabbit_2");
+        } else if (self.game.team[0].name == "Tune") {
+          self.game.properties["recruited_rabbit"] = 1;
+          this.walk_frame_time *= 0.5;
+          this.update = function() { this.x -= this.walk_speed * 4; this.direction = "left"; this.walkAnimation(); }
+          queue = [
+            ["Hey, kid. How'd you like to join a band?", "Tune"],
+            ["Oh my stars, Mister. Which band?", "Rabbit_2"],
+            ["T.N.T.", "Tune"],
+            ["Mister, please don't josh around like that.", "Rabbit_2"],
+            ["I'm not. The band is looking for replacements.\nThey sent me out here to recruit.", "Tune"],
+            ["You want me? Wow, me... me for T.N.T.", "Rabbit_2"],
+            ["Oh, that rhymed. I'm so sorry.\nPlease don't kick me out of the band.", "Rabbit_2"],
+            ["Go on backstage. The band is waiting!", "Tune"]
+          ];
+        }
       } else {
-        queue.push(["Do you still want to hear more T.N.T. facts from this\ndorky rabbit? Really?", "Rabbit_2"]);
-      }
-
-      queue.push([
-        "_interactive_", "Gun", 
-        "Sure", "No thanks.",
-        function() {
-          dice = Math.floor(Math.random() * 100);
-          if (dice < 20) {
-            self.addMoreConversation([["T.N.T. insists on using 100% renewable energy\nat every show. I don't know what that\nmeans, but it sure sounds good!", "Rabbit_2"]]);
-          } else if (dice < 40) {
-            self.addMoreConversation([["T.N.T. used to use smoke effects at their shows,\nbut Rance has a smoke allergy, so they\nswitched to using laser lights.", "Rabbit_2"]]);
-          } else if (dice < 60) {[]
-            self.addMoreConversation([["Chance and Lance were roommates at art school.", "Rabbit_2"]]);
-          } else if (dice < 80) {
-            self.addMoreConversation([["Vance used to have a job painting cars.\nChance and Lance worked at the same\nconvenience store.", "Rabbit_2"],
-              ["Vance met Rance at a record shop where\nRance worked. Greg was a pastor.", "Rabbit_2"]]);
+        if (self.game.team[0].name == "Tune" && self.game.properties["met_fact_rabbit"] == 1) {
+          queue.push(["Oh man, you're so cool. Do you...think I could\nbe a pop rocker singer someday?", "Rabbit_2"]);
+          queue.push([
+            "_interactive_", "Tune", 
+            "Yeah, absolutely!", "Oh, um... Maybe stick to your skills.",
+            function() {
+              self.addMoreConversation([["Really? Mister, you just about double made my day!", "Rabbit_2"]]);
+            },
+            function() {
+              self.addMoreConversation([["Yeah, you're... you're probably right.", "Rabbit_2"]]);
+          }]);
+        } else {
+          if (self.game.properties["met_fact_rabbit"] == null) {
+            self.game.properties["met_fact_rabbit"] = 1;
+            queue.push(["Buster, I'm not cool. In fact I'm a dork.\nBut I do know everything about T.N.T.\nDo you want to hear some T.N.T. facts?", "Rabbit_2"]);
           } else {
-            self.addMoreConversation([["T.N.T. has had seven chart topping\nsingles so far.", "Rabbit_2"]]);
+            queue.push(["Do you still want to hear more T.N.T. facts from this\ndorky rabbit? Really?", "Rabbit_2"]);
           }
-        },
-        function() {
-          self.addMoreConversation([["Okay, no worries! Facts aren't everyone's thing.", "Rabbit_2"]]);
-      }]);
-    }
-    self.longConversation(queue);
-  });
+
+          queue.push([
+            "_interactive_", "Gun", 
+            "Sure", "No thanks.",
+            function() {
+              dice = Math.floor(Math.random() * 100);
+              if (dice < 20) {
+                self.addMoreConversation([["T.N.T. insists on using 100% renewable energy\nat every show. I don't know what that\nmeans, but it sure sounds good!", "Rabbit_2"]]);
+              } else if (dice < 40) {
+                self.addMoreConversation([["T.N.T. used to use smoke effects at their shows,\nbut Rance has a smoke allergy, so they\nswitched to using laser lights.", "Rabbit_2"]]);
+              } else if (dice < 60) {[]
+                self.addMoreConversation([["Chance and Lance were roommates at art school,", "Rabbit_2"],
+                  ["and Rance and Greg were roommates after college.", "Rabbit_2"]]);
+              } else if (dice < 80) {
+                self.addMoreConversation([["Vance used to have a job painting cars.\nChance and Lance worked at the same\nconvenience store.", "Rabbit_2"],
+                  ["Vance met Rance at a record shop where\nRance worked. Greg was a pastor.", "Rabbit_2"]]);
+              } else {
+                self.addMoreConversation([["T.N.T. has had seven chart topping\nsingles so far.", "Rabbit_2"]]);
+              }
+            },
+            function() {
+              self.addMoreConversation([["Okay, no worries! Facts aren't everyone's thing.", "Rabbit_2"]]);
+          }]);
+        }
+      }
+      self.longConversation(queue);
+    });
+  }
 
   this.makeStockCharacter("Punk_Lady", "Danica", "updown", null, function() {
     var praises = [
@@ -308,17 +374,17 @@ Level.prototype.loadStageLevel = function() {
       "Woo! I saw Thom Yorke at a Foo Fighters concert\n once. Don't ask what I was doing there.",
       "I know it's the T.N.T. concert,\n but I'm feelin' Radiohead today.",
       "Thanks, now I have everything\n in its right place\n right place.",
-      "Whew. For a minute there\n I lost myself.",
+      "Whew. For a minute there I lost myself\nI lost myself, I lost myselllllf.",
       "You pass! Judge and jury, executioner\n Judge and jury, executioner\n Judge and jury, executioner",
       "Good job! I wish *I* was special.",
-      "I've got to praise you! I've got to\n praise you like I should\n no wait wrong band.",
+      "I've got to praise you! I've got to\n praise you like I should!\n No, no, wait, wrong band.",
     ];
     var disappointments = [
       "What? No!",
       "Uh... never feel bad for not knowing\n the lyrics of a popular song.",
       "Boo. You probably don't even listen to music.",
       "Ugh. Hail to the thief. Get it.",
-      "Nope. Now we separate\n Like ripples on a blank shore.",
+      "Nope, not right at all. Now we\nseparate like ripples on a blank shore.",
       "... it's making me feel ill. You crashed my party.",
       "Broken bears\n trip me as I speak.",
       "Don't reach out.\n We'd be a walking disaster.",
@@ -397,9 +463,11 @@ Level.prototype.loadStageLevel = function() {
         gun_struggles[Math.floor(Math.random() * gun_struggles.length)],
         puzzle[2],
         function() {
+          self.game.soundEffect("negative");
           self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
         },
         function() {
+          self.game.soundEffect("negative");
           self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
         }
       ];
@@ -422,9 +490,11 @@ Level.prototype.loadStageLevel = function() {
             puzzle[4],
             puzzle[5],
             function() {
+              self.game.soundEffect("positive");
               self.addMoreConversation([[praises[Math.floor(Math.random() * praises.length)], "Punk_Lady"]]);
             },
             function() {
+              self.game.soundEffect("negative");
               self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
             }
           ];
@@ -437,6 +507,7 @@ Level.prototype.loadStageLevel = function() {
           self.addMoreConversation(second_queue);
         },
         function() {
+          self.game.soundEffect("negative");
           self.addMoreConversation([[disappointments[Math.floor(Math.random() * disappointments.length)], "Punk_Lady"]]);
         }
       ];
@@ -448,18 +519,9 @@ Level.prototype.loadStageLevel = function() {
 
       queue.push(answers);
     }
-
-
-
-
     self.longConversation(queue);
   });
 
+  this.game.stopMusic();
   this.game.setMusic("deep_rough", "loop");
-  // this.game.setMusic("adventure", function() {
-  //   self.game.gotoScene("Bathroom");
-  // });
-
-  // This won't work because the mode is switched to "fade in", and from there to "active".
-  // this.shortConversation("It already happened. It is what it is. Please accept it.Anyway, we've got work to do, right? This is a very   very long sentence, but it'll fit, I think.", "Gun")
 }

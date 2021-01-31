@@ -1,17 +1,17 @@
 
 Level.prototype.loadBackstageLevel = function() {
   this.level_image = new Image();
-  this.level_image.src = "Art/Levels/bathroom.png";
+  this.level_image.src = "Art/Levels/backstage.png";
 
   this.camera_x = 0;
   this.camera_y = 0;
 
-  this.team[0].x = 830 - 640;
-  this.team[0].y = 430 - 360;
+  this.team[0].x = 940 - 640;
+  this.team[0].y = 550 - 360;
   this.team[0].level = this;
   this.team[0].history = [];
-  this.team[1].x = 850 - 640;
-  this.team[1].y = 425 - 360;
+  this.team[1].x = 970 - 640;
+  this.team[1].y = 550 - 360;
   this.team[1].level = this;
   this.team[1].history = [];
 
@@ -19,66 +19,32 @@ Level.prototype.loadBackstageLevel = function() {
 
   var self = this;
 
-  //   this.things.push(new Thing(477 - 640, 345 - 360, 40, "toilet", null, function() {
-  //     self.game.properties["use_toilet_without_washing"] = 1;
-  //     self.game.soundEffect("flush");
-  //   }));
-  //   this.things.push(new Thing(650 - 640, 345 - 360, 40, "toilet", null, function() {
-  //     self.game.properties["use_toilet_without_washing"] = 1;
-  //     self.game.soundEffect("flush");
-  //   }));
-  //   this.things.push(new Thing(300 - 640, 420 - 360, 40, "sink", null, function() {
-  //     self.game.properties["use_toilet_without_washing"] = null;
-  //     self.game.soundEffect("sink");
-  //   }));
-  //   this.things.push(new Thing(250 - 640, 470 - 360, 40, "sink", null, function() {
-  //     self.game.properties["use_toilet_without_washing"] = null;
-  //     self.game.soundEffect("sink");
-  //   }));
-  //   // this.things.push(new Thing(750 - 640, 365 - 360, 40, "bathroom_guy", null, null));
-  //   this.things.push(new Thing(985 - 640, 510 - 360, 40, "toilet_paper", null, null));
+  if(self.game.properties["recruited_rabbit"] == 1 &&
+    self.game.properties["recruited_lady"] == 1 &&
+    self.game.properties["recruited_man"] == 1 &&
+    self.game.properties["talked_to_the_whole_band"] == 1 &&
+    self.game.properties["gun_has_an_idea"] == 1 ) {
+    self.game.properties["replacements_recruited"] = 1
+  }
 
-  //   // Verticals
-  //   this.lines.push(new Line(380 - 640, 400 - 360, 890 - 640, 400 - 360));
-  //   this.lines.push(new Line(160 - 640, 580 - 360, 1110 - 640, 580 - 360));
+  // Verticals
+  this.lines.push(new Line(300 - 640, 440 - 360, 980 - 640, 440 - 360, ["down", "downright", "downleft"]));
+  this.lines.push(new Line(40 - 640, 700 - 360, 1240 - 640, 700 - 360, ["up", "upright", "upleft"]));
 
-  //   // Side walls
-  //   this.lines.push(new Line(860 - 640, 385 - 360, 1070 - 640, 595 - 360));
-  //   this.lines.push(new Line(415 - 640, 385 - 360, 205 - 640, 595 - 360));
+  // Side walls
+  this.lines.push(new Line(980 - 640, 440 - 360, 1240 - 640, 700 - 360, ["down", "left", "downleft"]));
+  this.lines.push(new Line(40 - 640, 700 - 360, 300 - 640, 440 - 360, ["down", "right", "downright"]));
 
-  //   this.doors.push(new Door(
-  //     870 - 640,
-  //     400 - 360,
-  //     955 - 640,
-  //     485 - 360,
-  //     ["up", "right", "upright"],
-  //     function() {
-  //       if (self.game.properties["use_toilet_without_washing"] != null) {
-  //         self.conversationStart("Hey! Wash your hands before you go!", "Bathroom_Guy");
-  //       } else {
-  //         self.mode = "fade_out";
-  //         self.fade_alpha = 0;
-  //         setTimeout(function() {
-  //           this.game.gotoScene("Stage", "bathroom_start");
-  //         }, 800);
-  //       }
-  //     }
-  //   ));
+  // Little lines at acute angles to prevent the automatic direction turn from breaking line rules.
+  this.lines.push(new Line(1240 - 640, 690 - 360, 1240 - 640, 710 - 360, ["left", "upleft", "downleft"]));
+  this.lines.push(new Line(40 - 640, 690 - 360, 40 - 640, 710 - 360, ["right", "upright", "downright"]));
 
-  //   // NPCs
-  // this.npcs.push(new Character(canvas, this, "Bathroom_Guy", "Bathroom_Guy", 750 - 640, 365 - 360,
-  //   // update
-  //   null,
-  //   // action
-  //   function() {
-  //     self.conversationStart("If you use the toilet, please wash your hands when\nyou finish.", "Bathroom_Guy");
-  // }));
 
   this.doors.push(new Door(
-    870 - 640,
-    400 - 360,
-    955 - 640,
-    485 - 360,
+    1040 - 640,
+    510 - 360,
+    1120 - 640,
+    590 - 360,
     ["up", "right", "upright"],
     function() {
       self.mode = "fade_out";
@@ -94,7 +60,7 @@ Level.prototype.loadBackstageLevel = function() {
     ["So... I have an idea.", "Gun"],
     ["Oh, really?", "TNT_Rance"],
     ["Yeah. So...", "Gun"],
-    ["If we found replacements to take over the band,\ncould you retire?", "Gun"],
+    ["What if you get someone to swap you out?\nTrain up replacements. Then could you retire?", "Gun"],
     ["I... ooh.", "TNT_Vance"],
     ["Oh. Oh, wow, that'll work, won't it, Chance?", "TNT_Lance"],
     ["Your guess is as good as mine, Lance.\nBut I'm not against it.", "TNT_Chance"],
@@ -108,16 +74,66 @@ Level.prototype.loadBackstageLevel = function() {
     ["Go find us three replacements,\n and we can come with you.", "TNT_Chance"],
   ]
 
+  end_conversation = [
+    ["Yo, bears! We tried out these replacements", "TNT_Chance"],
+    ["and they're great!", "TNT_Lance"],
+    ["We're ready to go on a magic carpet ride with you.", "TNT_Vance"],
+    ["In fact, we'll follow you anywhere.", "TNT_Rance"],
+    ["...", "TNT_Greg"],
+    ["I won't be going.", "TNT_Greg"],
+    ["I love being in a band. I'll stay behind and continue\nto train the new people.", "TNT_Greg"],
+    ["*Vibrates*", "Rabbit_2"],
+    ["That sobered me right up.", "Walking_Lady"],
+    ["I really wish I'd washed my hands.", "Mohawk_Man_Orange"],
+    ["Greg! I'll miss you.", "TNT_Rance"],
+    ["I'll miss you too, buddy.", "TNT_Greg"],
+    ["Goodbye and good luck, Greg. We'll all miss you.\nOkay, T.N.T, let's roll out or whatever you're\nsupposed to say when you make a dramatic exit.", "TNT_Chance"],
+    ["Byeeee.", "TNT_Chance"],
+  ]
+
+  if (self.game.properties["recruited_rabbit"] == 1) {
+    var character = new Character(canvas, this, "Rabbit_2", "Benny", 610 - 640, 580 - 360, null, function() {
+      self.shortConversation("*Vibrates*", "Rabbit_2");
+    });
+    character.current_image = "right_0";
+    this.npcs.push(character);
+  }
+
+  if (self.game.properties["recruited_lady"] == 1) {
+    var character = new Character(canvas, this, "Walking_Lady", "Sharon", 510 - 640, 580 - 360, null, function() {
+      self.shortConversation("That sobered me right up.", "Walking_Lady");
+    });
+    character.current_image = "right_0";
+    this.npcs.push(character);
+  }
+
+  if (self.game.properties["recruited_man"] == 1) {
+    var character = new Character(canvas, this, "Mohawk_Man_Orange", "John", 420 - 640, 580 - 360, null, function() {
+      self.shortConversation("I really wish I'd washed my hands.", "Mohawk_Man_Orange");
+    });
+    character.current_image = "right_0";
+    this.npcs.push(character);
+  }
+
   // Yo. Hey. Sup. Why are you here? Hi, I'm Greg. I'm just happy to be here.
   // I don't know what to do.
   // I guess we're just stuck.
   // This is how it's gotta be, I guess.
   // Sigh.
   // These guys are bummed, but it's really just fine.
-  this.npcs.push(new Character(canvas, this, "TNT_Chance", "Chance", 760 - 640, 350 - 360, null, function() {
+  this.npcs.push(new Character(canvas, this, "TNT_Chance", "Chance", 760 - 640, 365 - 360, null, function() {
     var game = self.game;
     
-    if (self.game.team[0].name == "Gun") {
+    if (self.game.properties["replacements_recruited"] == 1) {
+      self.longConversation(end_conversation);
+      self.endConversationAction = function() {
+        self.mode = "fade_out";
+        self.fade_alpha = 0;
+        setTimeout(function() {
+          self.game.gotoScene("End");
+        }, 800);
+      }
+    } else if (self.game.team[0].name == "Gun") {
       if (self.game.properties["talked_to_the_whole_band"] == 1) {
         if (self.game.properties["gun_has_an_idea"] == null) {
           // The idea
@@ -152,10 +168,19 @@ Level.prototype.loadBackstageLevel = function() {
     }
   }));
 
-  this.npcs.push(new Character(canvas, this, "TNT_Lance", "Lance", 700 - 640, 350 - 360, null, function() {
+  this.npcs.push(new Character(canvas, this, "TNT_Lance", "Lance", 700 - 640, 365 - 360, null, function() {
     var game = self.game;
 
-    if (self.game.team[0].name == "Gun") {
+    if (self.game.properties["replacements_recruited"] == 1) {
+      self.longConversation(end_conversation);
+      self.endConversationAction = function() {
+        self.mode = "fade_out";
+        self.fade_alpha = 0;
+        setTimeout(function() {
+          self.game.gotoScene("End");
+        }, 800);
+      }
+    } else if (self.game.team[0].name == "Gun") {
       if (self.game.properties["talked_to_the_whole_band"] == 1) {
         if (self.game.properties["gun_has_an_idea"] == null) {
           // The idea
@@ -194,10 +219,19 @@ Level.prototype.loadBackstageLevel = function() {
     }
   }));
 
-  this.npcs.push(new Character(canvas, this, "TNT_Vance", "Vance", 640 - 640, 350 - 360, null, function() {
+  this.npcs.push(new Character(canvas, this, "TNT_Vance", "Vance", 640 - 640, 365 - 360, null, function() {
     var game = self.game;
 
-    if (self.game.team[0].name == "Gun") {
+    if (self.game.properties["replacements_recruited"] == 1) {
+      self.longConversation(end_conversation);
+      self.endConversationAction = function() {
+        self.mode = "fade_out";
+        self.fade_alpha = 0;
+        setTimeout(function() {
+          self.game.gotoScene("End");
+        }, 800);
+      }
+    } else if (self.game.team[0].name == "Gun") {
       if (self.game.properties["talked_to_the_whole_band"] == 1) {
         if (self.game.properties["gun_has_an_idea"] == null) {
           // The idea
@@ -235,10 +269,19 @@ Level.prototype.loadBackstageLevel = function() {
     }
   }));
 
-  this.npcs.push(new Character(canvas, this, "TNT_Rance", "Rance", 580 - 640, 350 - 360, null, function() {
+  this.npcs.push(new Character(canvas, this, "TNT_Rance", "Rance", 580 - 640, 365 - 360, null, function() {
     var game = self.game;
 
-    if (self.game.team[0].name == "Gun") {
+    if (self.game.properties["replacements_recruited"] == 1) {
+      self.longConversation(end_conversation);
+      self.endConversationAction = function() {
+        self.mode = "fade_out";
+        self.fade_alpha = 0;
+        setTimeout(function() {
+          self.game.gotoScene("End");
+        }, 800);
+      }
+    } else if (self.game.team[0].name == "Gun") {
       if (self.game.properties["talked_to_the_whole_band"] == 1) {
         if (self.game.properties["gun_has_an_idea"] == null) {
           // The idea
@@ -273,22 +316,31 @@ Level.prototype.loadBackstageLevel = function() {
     }
   }));
 
-  this.npcs.push(new Character(canvas, this, "TNT_Greg", "Greg", 520 - 640, 350 - 360, null, function() {
+  this.npcs.push(new Character(canvas, this, "TNT_Greg", "Greg", 520 - 640, 365 - 360, null, function() {
     var game = self.game;
 
-    if (self.game.team[0].name == "Gun") {
+    if (self.game.properties["replacements_recruited"] == 1) {
+      self.longConversation(end_conversation);
+      self.endConversationAction = function() {
+        self.mode = "fade_out";
+        self.fade_alpha = 0;
+        setTimeout(function() {
+          self.game.gotoScene("End");
+        }, 800);
+      }
+    } else if (self.game.team[0].name == "Gun") {
       if (self.game.properties["talked_to_the_whole_band"] == 1) {
         if (self.game.properties["gun_has_an_idea"] == null) {
           self.shortConversation("Maybe if you talk to Chance, or Lance, or\nVance or Rance, you'll come up with an idea.", "TNT_Greg");
         } else {
-          self.shortConversation("Good luck, Gun!", "TNT_Greg"); 
+          self.shortConversation("I saw a rabbit, a shroomy lady, and an orange guy\nwho look like they might make good replacements.\nGood luck!", "TNT_Greg"); 
         }
       } else {
         self.shortConversation("Hi, I'm Greg. I'm just happy to be here.", "TNT_Greg");
       }
     } else if (self.game.team[0].name == "Tune") {
       if (self.game.properties["gun_has_an_idea"] == 1) {
-        self.shortConversation("Good luck, Tune!", "TNT_Greg"); 
+        self.shortConversation("I saw a rabbit, a shroomy lady, and an orange guy\nwho look like they might make good replacements.\nGood luck!", "TNT_Greg"); 
       } else if (self.game.properties["talked_to_the_whole_band"] == 1) {
         self.shortConversation("These guys are bummed, but it's really just fine.", "TNT_Greg");
       } else {
@@ -307,4 +359,8 @@ Level.prototype.loadBackstageLevel = function() {
     }
   }));
 
+  if (this.game.properties["replacements_recruited"] == 1) {
+    this.game.stopMusic();
+    this.game.setMusic("adventure", "loop");
+  }
 }
