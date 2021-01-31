@@ -113,8 +113,7 @@ class ShowScene {
 
 
   buildScene() {
-    this.level_image = new Image();
-    this.level_image.src = "Art/Levels/theater_stage.png";
+    this.level_image = stage_image;
 
     this.lit_stage = new Image();
     this.lit_stage.src = "Art/Levels/lit_stage.png";

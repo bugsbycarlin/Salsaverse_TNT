@@ -18,8 +18,7 @@ class VenueScene {
   start() {
     var self = this;
 
-    this.level_image = new Image();
-    this.level_image.src = "Art/Levels/venue.png";
+    this.level_image = venue_image;
 
     this.start_time = Date.now();
     this.mode = "fade_in";

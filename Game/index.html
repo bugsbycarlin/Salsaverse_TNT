@@ -2,24 +2,41 @@
 <html>
   <head>
     <title>TNT (A Salsaverse Vignette)</title>
-    <link rel="preload" href="http://www.bugsby.net/drive/Minecraft.ttf" as="font" crossorigin="anonymous" />
+    <link rel="preload" href="/extra/fonts/Minecraft.woff" as="font" crossorigin="anonymous" />
     <style type="text/css">
-      #mainDiv
+      canvas 
+      { 
+        border: 0px; 
+      }
+      body 
+      {
+        margin:0;
+        padding:0;
+        height:100%;
+        overflow: hidden;
+      }
+      #centerdiv
       {
         position: relative;
+        background-color: #FFFFFF;
+        width: 1280;
+        left:50%;
+        margin-left:-640px;
+        height: 720px;
+        
+      }
+      #mainDiv
+      {
+        position: absolute;
         margin:0;
         padding:0;
         width: 1280px;
         height: 720px;
         left: 50%;
-        top: 50px;
+        top: 50%;
         margin-left: -640px;
+        margin-top: -360px;
         background-color: #F8F8F8;
-        
-        overflow: hidden;
-        #border-style: solid;
-        #border-radius: 18px;
-        #border-color: #6B89D8
       }
       #loadingdiv
       {
@@ -39,7 +56,7 @@
       }
       @font-face {
         font-family: 'Minecraft';
-        src: url('http://www.bugsby.net/drive/Minecraft.ttf');
+        src: url('/extra/fonts/Minecraft.woff');
       }
     </style>
     <script type="text/javascript" src="Source/jquery.min.js"></script>
@@ -98,11 +115,13 @@
       <source src="Sound/positive.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="mainDiv">
-      <div id="loadingdiv">
-        Loading
+    <div id="centerDiv">
+      <div id="mainDiv">
+        <div id="loadingdiv">
+          Loading
+        </div>
+        <canvas id="canvas"></canvas>
       </div>
-      <canvas id="canvas"></canvas>
     </div>
   </body>
 </html>

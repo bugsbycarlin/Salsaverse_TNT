@@ -1,7 +1,6 @@
 
 Level.prototype.loadBackstageLevel = function() {
-  this.level_image = new Image();
-  this.level_image.src = "Art/Levels/backstage.png";
+  this.level_image = backstage_image;
 
   this.camera_x = 0;
   this.camera_y = 0;

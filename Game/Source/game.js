@@ -1,3 +1,12 @@
+stage_image = new Image();
+stage_image.src = "Art/Levels/theater_stage.png";
+venue_image = new Image();
+venue_image.src = "Art/Levels/venue.png";
+bathroom_image = new Image();
+bathroom_image.src = "Art/Levels/bathroom.png";
+backstage_image = new Image();
+backstage_image.src = "Art/Levels/backstage.png";
+
 class Game {
   constructor() {
     $('img').bind('dragstart', function(event) { event.preventDefault(); });
@@ -119,10 +128,12 @@ class Game {
       var self = this;
 
       if (second_param == "loop") {
+        this.music.unbind("ended");
         this.music.bind("ended", function(){
           self.music.trigger("play");
         });
       } else if (second_param != null) {
+        this.music.unbind("ended");
         this.music.bind("ended", function(){
           second_param();
         });
@@ -142,6 +153,8 @@ class Game {
 
 
   handleKeyUp(ev) {
+    ev.preventDefault();
+
     this.keymap[ev.key] = null;
 
     if (this.scene.handleKeyUp != null) {
@@ -151,6 +164,8 @@ class Game {
 
 
   handleKeyDown(ev) {
+    ev.preventDefault();
+
     this.keymap[ev.key] = true;
 
     if (this.scene.handleKeyDown != null) {
@@ -159,6 +174,8 @@ class Game {
   }
 
   handleMouse(ev) {
+    ev.preventDefault();
+
     if (this.scene.handleMouse != null) {
       this.scene.handleMouse(ev);
     }

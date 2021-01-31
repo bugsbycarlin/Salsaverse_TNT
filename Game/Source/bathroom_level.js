@@ -1,7 +1,6 @@
 
 Level.prototype.loadBathroomLevel = function() {
-  this.level_image = new Image();
-  this.level_image.src = "Art/Levels/bathroom.png";
+  this.level_image = bathroom_image;
 
   this.camera_x = 0;
   this.camera_y = 0;

@@ -2,8 +2,7 @@
 Level.prototype.loadStageLevel = function() {
   var self = this;
 
-  this.level_image = new Image();
-  this.level_image.src = "Art/Levels/theater_stage.png";
+  this.level_image = stage_image;
 
   this.camera_x = 0;
   this.camera_y = 0;
